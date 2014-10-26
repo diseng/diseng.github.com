@@ -90,7 +90,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     
 ### 3. 网页格式化输出JSON
 
-上述已经成功的把json返回到浏览器了，但是显式出来的是常常的一整条json串，不便于阅读。如何能够用缩进的方式展现json呢？
+上述已经成功的把json返回到浏览器了，但是显式出来的是长长的一整条json串，不便于阅读。如何能够用缩进的方式展现json呢？
 
 解决方法有很多，你可以使用网上别人开源的类库，除了能支持缩进，还可以语法高亮等等，但是我比较喜欢简单，能够不引入类库就尽量不引入。
 
@@ -135,8 +135,8 @@ function heredoc(fn) {
 CRM中有些逻辑库是分8个物理库的，每个物理库中又分8个物理表，因此需要根据不同的用户，通过CRM的分库分表规则来确定具体的库表信息，所以需要在Mybatis中动态指定库名和表名，其中参数是用于库表名的使用${param}，参数是用于where语句中的条件值的使用#{param}，另外当Mybatis的接口方法有多个入参时，需要明确的指定入参与SQL语句中参数的对应关系，例如下面这样：
 
 {% highlight java %}
- @Select("SELECT * FROM crm_${center}.ins_user_os_state_${regionId} WHERE USER_ID = #{userId}")
-    Map<String, Object> getOSStateByUserId(@Param("center") String center, @Param("regionId") String regionId, @Param("userId") String userId);
+@Select("SELECT * FROM crm_${center}.ins_user_os_state_${regionId} WHERE USER_ID = #{userId}")
+Map<String, Object> getOSStateByUserId(@Param("center") String center, @Param("regionId") String regionId, @Param("userId") String userId);
 {% endhighlight %}
 
 ### 8. 文件下载
@@ -145,10 +145,10 @@ CRM中有些逻辑库是分8个物理库的，每个物理库中又分8个物理
 
 {% highlight java %}
 @RequestMapping(value = "getFile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public FileSystemResource getFile(HttpServletResponse response, @RequestParam String path) {
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + path + "\"");
-        return new FileSystemResource(path);
-    }
+public FileSystemResource getFile(HttpServletResponse response, @RequestParam String path) {
+    response.setHeader("Content-Disposition", "attachment; filename=\"" + path + "\"");
+    return new FileSystemResource(path);
+}
 {% endhighlight %}
 
 
