@@ -1,8 +1,8 @@
 ---
 layout: post
 title : 为clifaweibo增加长文字微博分片发送功能
-category : software
-tags : [software]
+category : program
+tags : [program,go]
 ---
 {% include JB/setup %}
 

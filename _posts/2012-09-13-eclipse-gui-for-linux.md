@@ -1,8 +1,8 @@
 ---
 layout: post
 title : Linux下Eclipse的界面调整
-category : tool
-tags : [tool]
+category : linux
+tags : [linux,eclipse]
 ---
 {% include JB/setup %}
 

@@ -1,8 +1,8 @@
 ---
 layout: post
 title : 《看见》读书摘录
-category : read
-tags : [read]
+category : book
+tags : [book]
 ---
 {% include JB/setup %}
 

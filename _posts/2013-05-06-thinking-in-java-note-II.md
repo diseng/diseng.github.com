@@ -1,8 +1,8 @@
 ---
 layout: post
 title : 《Thinking in Java》再读笔记(二)
-category : read
-tags : [read]
+category : book
+tags : [book]
 ---
 {% include JB/setup %}
 

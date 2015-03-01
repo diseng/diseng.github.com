@@ -2,7 +2,7 @@
 layout: post
 title : 为google日历增添农历
 category : tool
-tags : [tool]
+tags : [tool,google]
 ---
 {% include JB/setup %}
 

@@ -2,7 +2,7 @@
 layout: post
 title : 找实习小结
 category : work
-tags : [work]
+tags : [work,interview]
 ---
 {% include JB/setup %}
 

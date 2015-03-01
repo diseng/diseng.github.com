@@ -1,8 +1,8 @@
 ---
 layout: post
 title : SpringMVC4 Hibernate4零XML整合 
-category : app
-tags : [app]
+category : program
+tags : [program,java]
 ---
 {% include JB/setup %}
 

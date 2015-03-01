@@ -2,7 +2,7 @@
 layout: post
 title : 【整理】写给java web一年左右工作经验的人 
 category : work
-tags : [work]
+tags : [work,java]
 ---
 {% include JB/setup %}
 

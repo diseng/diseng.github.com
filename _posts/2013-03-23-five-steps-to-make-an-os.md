@@ -1,8 +1,8 @@
 ---
 layout: post
 title : 五步创建HelloWorld操作系统
-category : software
-tags : [software]
+category : program
+tags : [program,os]
 ---
 {% include JB/setup %}
 

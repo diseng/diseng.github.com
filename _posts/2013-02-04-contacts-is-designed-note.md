@@ -1,8 +1,8 @@
 ---
 layout: post
 title : 《人脉是设计出来的》读书摘录
-category : read
-tags : [read]
+category : book
+tags : [book]
 ---
 {% include JB/setup %}
 

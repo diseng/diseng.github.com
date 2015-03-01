@@ -1,8 +1,8 @@
 ---
 layout: post
 title : 《深入Java虚拟机》读书摘录
-category : read
-tags : [read]
+category : book
+tags : [book]
 ---
 {% include JB/setup %}
 

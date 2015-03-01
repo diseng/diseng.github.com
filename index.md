@@ -15,7 +15,6 @@ title: diseng's blog
 		<td width="40%" style="vertical-align:top;">
 			<div><img alt="diseng" src="{{ ASSET_PATH }}hooligan/img/diseng.jpg"/></div>
 			<div>University of Electronic Science and Technology of China</div> 
-			<div>Information Security Professional</div>
 			<div>Hangzhou , China</div>
 		</td>
 	</tr>

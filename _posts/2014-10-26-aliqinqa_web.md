@@ -1,8 +1,8 @@
 ---
 layout: post
 title : aliqinqa_web应用开发小记
-category : app
-tags : [app]
+category : program
+tags : [aprogram,java]
 ---
 {% include JB/setup %}
 

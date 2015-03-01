@@ -1,8 +1,8 @@
 ---
 layout: post
 title : 修改Fuubo微博尾巴
-category : app
-tags : [app]
+category : program
+tags : [program]
 ---
 {% include JB/setup %}
 

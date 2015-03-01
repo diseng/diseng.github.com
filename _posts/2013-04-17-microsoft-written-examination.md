@@ -2,7 +2,7 @@
 layout: post
 title : 微软笔试小结
 category : work
-tags : [work]
+tags : [work,interview]
 ---
 {% include JB/setup %}
 

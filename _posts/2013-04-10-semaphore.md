@@ -1,8 +1,8 @@
 ---
 layout: post
 title : 信号量简单应用
-category : software
-tags : [software]
+category : program
+tags : [program,c]
 ---
 {% include JB/setup %}
 

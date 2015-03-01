@@ -1,8 +1,8 @@
 ---
 layout: post
 title : linux中stdout,stdin,stderr初识
-category : software
-tags : [software]
+category : program
+tags : [program]
 ---
 {% include JB/setup %}
 

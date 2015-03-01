@@ -1,8 +1,8 @@
 ---
 layout: post
 title : 《把时间当作朋友》读书摘录
-category : read
-tags : [read]
+category : book
+tags : [book]
 ---
 {% include JB/setup %}
 
