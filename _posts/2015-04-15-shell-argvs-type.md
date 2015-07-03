@@ -63,7 +63,7 @@ getopts是内置在bash中的,它不支持长选项,getopt是独立的可执行�
 
 下面是一个完整的示例脚本:
 
-{% highlight shell %}
+{% highlight bash %}
 #!/bin/bash
 
 while getopts "ab:" arg #选项后面的冒号表示该选项需要参数
@@ -104,7 +104,7 @@ getopt和getopts类似,也是通过冒号来区分选项是否接受参数值,�
 
 一个完整的示例脚本如下:
 
-{% highlight shell %}
+{% highlight bash %}
 #!/bin/bash
 
 ARGS=`getopt -o ab: -l "argv3:,help" -- "$@"`

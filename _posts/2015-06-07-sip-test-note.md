@@ -58,6 +58,7 @@ function call( callee )
 end
 {% endhighlight %}
 
+
 ### 4. 如何按照会话进行抓包
 
 要对上述的呼叫进行覆盖率以及语音质量方面的分析，我们首先需要获取相关的SIP报文，以及承载音视频内容的[RTP(Real-time Transport Protocol，实时传输协议)](http://zh.wikipedia.org/wiki/%E5%AE%9E%E6%97%B6%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE)报文。
@@ -80,7 +81,7 @@ sudo pcapsipdump -i eth0 -d /home/admin/pcap
 
 使用下面的命令，可以查看该会话的所有SIP信息
 
-{% highlight shell %}
+{% highlight bash %}
 tshark -Y sip -r pcapFile
 # output
 # 1   0.000000 198.xxx.xxx.xxx -> 202.xxx.xxx.xxx SIP/SDP 1137 Request: INVITE sip:390115170171@202.xxx.xxx.xxx:5060 |
@@ -93,9 +94,10 @@ tshark -Y sip -r pcapFile
 # 8  15.703204 198.xxx.xxx.xxx -> 202.xxx.xxx.xxx SIP 477 Status: 200 OK |
 {% endhighlight %}
 
+
 而一般情况下，我们只需要获取最终状态即可，可以使用如下命令对内容进行筛选
 
-{% highlight shell %}
+{% highlight bash %}
 tshark -Y sip -r pcapFile|grep 'Status'|tail -n 1|awk -F '[:|]' '{print $2}'
 # output
 # 200 OK
@@ -103,7 +105,7 @@ tshark -Y sip -r pcapFile|grep 'Status'|tail -n 1|awk -F '[:|]' '{print $2}'
 
 除了获取该会话的最终状态，该会话的呼叫号码也是很重要的一个信息，我们依然可以从SIP信息中筛选中呼叫号码
 
-{% highlight shell %}
+{% highlight bash %}
 tshark -Y "sip.Method == INVITE" -r pcapFile|head -n 1|awk -F '[:@+]' '{print $3}'
 # output
 # 390115170171
@@ -121,7 +123,7 @@ tshark -Y "sip.Method == INVITE" -r pcapFile|head -n 1|awk -F '[:@+]' '{print $3
 
 有了上述两个软件，使用下面的shell脚本即可从pcap文件中提取出wav音频文件，其原理是用tshark读取出双向的rtp.ssrc，分别处理，并取出rtp.payload的HEX值，生成raw文件，然后用sox转成wav文件
 
-{% highlight shell %}
+{% highlight bash %}
 if [ -z $1 ] ; then
     echo "`basename $0` {pcap-file}"
     exit
@@ -147,13 +149,14 @@ rm *.payloads *.raw
 sox -mM $A.wav $B.wav $A-$B.wav
 {% endhighlight %}
 
+
 不要忘记上一节中提到的获取呼叫号码的方法，使用号码来归类存放音频文件，方便后续人为打分
 
 #### 6.2 系统打分
 
 使用tshark可以对pcap文件中RTP报文进行统计，分析得出丢包率、抖动率、最大时延、平均时延等数据
 
-{% highlight shell %}
+{% highlight bash %}
 tshark -q -z rtp,streams -r pcapFile
 # output
 # ========================= RTP Streams ========================
@@ -163,9 +166,10 @@ tshark -q -z rtp,streams -r pcapFile
 # ==============================================================
 {% endhighlight %}
 
+
 我们只需要取出其中的Src IP addr、Dest IP addr、Payload、Pkts、Lost、Max Delta(ms)、Max Jitter(ms)、Mean Jitter(ms)字段即可。
 
-{% highlight shell %}
+{% highlight bash %}
 tshark -q -z rtp,streams -r pcapFile|sed -n '3,4p'|awk '{print $1,$3,$8,$9,$10$11,$12,$13,$14}'
 # output
 # 202.xxx.xxx.xxx 198.xxx.xxx.xxx PCMU 1055 0(0.0%) 20.75 0.17 0.05
