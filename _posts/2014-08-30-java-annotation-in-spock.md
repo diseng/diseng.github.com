@@ -12,7 +12,7 @@ tags : [program,java]
 
 那么有没有即不使用excel，也不用重复的将代码进行copy改的解决方式呢？恩，很自然的就去请教谷歌老师了。从谷歌老师这边得到两个答案，一是用JUnitParams，代码是这个样子的：
 
-{% highlight java %}
+```java
 @RunWith(JUnitParamsRunner.class)
 public class JUnitParamsTest {
     @Test
@@ -22,11 +22,11 @@ public class JUnitParamsTest {
         assertThat(new Person(age).isAdult(), is(valid));
     }
 }
-{% endhighlight %}
+```
 
 当然，JUnitParams还提供方法提供参数、类提供参数等，具体的可以看[这里](https://junitparams.googlecode.com/hg/apidocs/junitparams/JUnitParamsRunner.html)，另外一种是使用spock，代码是这个样子的：
 
-{% highlight groovy %}
+```groovy
 class Math extends Specification {
     def "maximum of two numbers"() {
         expect:
@@ -39,7 +39,7 @@ class Math extends Specification {
         0 | 0 | 0
     }
 }
-{% endhighlight %}
+```
 
 恩，首先对spock的代码长这样，很有好感，再加上考虑到入参一多，JUnitParams就显得不那么美观了。于是，我就踏上了spock之路。
 
@@ -51,17 +51,18 @@ class Math extends Specification {
 
 首先定义一个注解ShowTime，它的作用是在方法运行之前打印一次时间，在方法运行之后，再打印一次时间，并打印出两次时间的间隔，也就是这个方法运行所消耗的时间。
 
-{% highlight java %}
+```java
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ShowTime {
 }
-{% endhighlight %}
+```
 
 恩，也许你已经发现了，定义注解和定义接口十分相似，只是在interface前加了一个@而已，然后其中的Target指的是注解的作用目标，可以是方法、类、变量、包、参数等，其中的Retention指的是保留时间，比如编译时、运行时、等，上面这个注解就是用于方法，并且在运行时起作用。
 
 接着，我们写一个类来使用ShowTime注解
-{% highlight java %}
+
+```java
 public class ShowTimeExample {
     @ShowTime
     public void sleep(){
@@ -73,11 +74,11 @@ public class ShowTimeExample {
         }
     }
 }
-{% endhighlight %}
+```
 
 然后，需要写一个入口，来执行上面的方法，并让ShowTime注解生效。
 
-{% highlight java %}
+```java
 public class ShowTimeExecutor {
     public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
         Method[] methods = ShowTimeExample.class.getMethods();
@@ -93,7 +94,7 @@ public class ShowTimeExecutor {
         }
     }
 }
-{% endhighlight %}
+```
 
 可以看到输出：
 
@@ -110,7 +111,7 @@ public class ShowTimeExecutor {
 
 在请教了谷歌老师之后，发现原来spock已经给用户预留了annotation的扩展入口。
 
-{% highlight java %}
+```java
 public interface IAnnotationDrivenExtension<T extends Annotation> {
   //访问类注解，当类含有spock注解时会调用这个方法
   void visitSpecAnnotation(T annotation, SpecInfo spec);
@@ -127,7 +128,7 @@ public interface IAnnotationDrivenExtension<T extends Annotation> {
   //方法类，在上面这些方法之后执行这个方法
   void visitSpec(SpecInfo spec);
 }
-{% endhighlight %}
+```
 
 我只需要实现上面的IAnnotationDrivenExtension，然后用在自己定义的注解上即可。
 
@@ -135,7 +136,7 @@ spock不仅为用户预留了annotation扩展入口，还定义了一个监听�
 
 spock定义的监听器是这样的：
 
-{% highlight java %}
+```java
 public interface IRunListener {
   //在类运行之前调用
   void beforeSpec(SpecInfo spec);
@@ -164,15 +165,15 @@ public interface IRunListener {
   //在方法标记了@Ignore时调用
   void featureSkipped(FeatureInfo feature);
 }
-{% endhighlight %}
+```
 
 spock定义的拦截器是这样的：
 
-{% highlight java %}
+```java
 public interface IMethodInterceptor {
   void intercept(IMethodInvocation invocation) throws Throwable;
 }
-{% endhighlight %}
+```
 
 只需要在实现拦截器时往intercept方法中加入自己的逻辑即可。
 
@@ -180,18 +181,18 @@ public interface IMethodInterceptor {
 
 首先定义一个annotation：
 
-{% highlight java %}
+```java
 @Retention(RetentionPolicy.RUNTIME)
 @Target([ElementType.TYPE, ElementType.METHOD])
 @ExtensionAnnotation(TestDataExtension)
 public @interface TestData {
     String value()//用户指定数据文件路径
 }
-{% endhighlight %}
+```
 
 用TestDataExtension来实现IAnnotationDrivenExtension：
 
-{% highlight groovy %}
+```groovy
 class TestDataExtension extends AbstractAnnotationDrivenExtension<TestData> {
 
     def listener = new TestDataListener()
@@ -214,11 +215,11 @@ class TestDataExtension extends AbstractAnnotationDrivenExtension<TestData> {
         spec.addListener(listener)
     }
 }
-{% endhighlight %}
+```
 
 把具体的操作放在监听器TestDataListener里：
 
-{% highlight groovy %}
+```groovy
 class TestDataListener extends AbstractRunListener {
     def specInfos = new HashMap<SpecInfo,String>()
     def featureInfos = new HashMap<FeatureInfo,String>()
@@ -251,11 +252,11 @@ class TestDataListener extends AbstractRunListener {
         }
     }
 }
-{% endhighlight %}
+```
 
 下面写一个测试类：
 
-{% highlight groovy %}
+```groovy
 @TestData("directory1/file1")
 class TestDataSpec extends Specification{
 
@@ -265,7 +266,7 @@ class TestDataSpec extends Specification{
         println("something expected")
     }
 }
-{% endhighlight %}
+```
 
 根据注解TestData的作用，我希望在类运行之前/后，往数据库中插入/删除directory1/file1中的内容，在方法testData运行之前/后往数据库中插入/删除directory2/file2中的内容(这里使用打印语句代替了数据库操作)。实际运行结果：
 

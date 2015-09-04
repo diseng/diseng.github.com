@@ -26,7 +26,7 @@ tags : [algorithm]
 
 以下是Java实现的一个Bloom Filter
 
-{% highlight java %}
+```java
 import java.util.BitSet;
 
 public class BloomFilter {      
@@ -120,6 +120,6 @@ public class BloomFilter {
 	}
   
 }     
-{% endhighlight %}
+```
 
 ps：如果加大每个信息的指纹数，应该可以降低误识别率。

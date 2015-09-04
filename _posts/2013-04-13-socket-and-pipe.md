@@ -14,7 +14,7 @@ tags : [program,c]
 
 一个线程利用recv接收信息并显示
 
-{% highlight c %}
+```c
 #include <stdio.h>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -146,7 +146,7 @@ int main(void)
    while(!getchar());
    return 0;
 }
-{% endhighlight %}
+```
 
 运行截图:
 
@@ -161,7 +161,7 @@ int main(void)
 子进程从管道接收字符流写入另一个文件
 
 
-{% highlight c %}
+```c
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -217,7 +217,7 @@ int main()
 
     return 1;
 }
-{% endhighlight %}
+```
 
 运行截图:
 

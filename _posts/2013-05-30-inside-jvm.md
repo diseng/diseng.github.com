@@ -193,7 +193,7 @@ tags : [book]
 
     1)使用一个非常量静态字段只有当类或者接口的确声明了这个字段是才是主动使用.对于子类,子接口和实现了接口的类来说,这就是被动调用
 
-{% highlight java %}
+```java
 class NewParent {
 
     static int hoursOfSleep = (int) (Math.random() * 3.0);
@@ -231,11 +231,11 @@ Example2 was initialized.
 NewParent was initialized.
 0
 *///:~
-{% endhighlight %}
+```
 
     2)如果一个字段既是静态的(static)又是最终的(final),并且使用一个编译时常量表达式初始化,使用这样的字段,就不是对声明该字段类的主动使用.Java编译器把这样的字段解析成对常量的本地拷贝.
 
-{% highlight java %}
+```java
 interface Angry {
 
     String greeting = "Grrrr!";
@@ -279,7 +279,7 @@ Example3 was initialized.
 Grrrr!
 Woof, woof, world!
 *///:~
-{% endhighlight %}
+```
 
 ### 5.明确类实例化
 
@@ -318,7 +318,7 @@ Woof, woof, world!
 
     在Java程序中,可以调用String类的intern()方法来拘留一个字符串.如果具有相同序列的Unicode字符串已经被拘留过,intern()方法返回一个指向相符的已经被拘留的字符串对象的应用.如果字符串对象的intern()方法被调用(该字符串对象包含的字符串序列还没有被拘留),那么这个对象本身就被拘留.
 
-{% highlight java %}
+```java
 class Example1 {
 
     // Assume this application is invoked with one command-line
@@ -366,7 +366,7 @@ class Example1 {
 Before interning argZero: they're different string objects.
 After interning argZero: they're the same string object!
 *///:~
-{% endhighlight %}
+```
 
 ### 3.接口方法和实例方法
 

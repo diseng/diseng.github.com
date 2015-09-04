@@ -37,16 +37,16 @@ tags : [work,java]
  
 我们现有的controller做法是，不同的业务调用不同的servlet，通过参数的不同，调用不同的方法，比如，有下面一个form 
 
-{% highlight html %}
+```html
 <form action=”UserServlet?command=login”> 
     <input name=”name” /> 
     <input name=”password” /> 
 </form>
-{% endhighlight %}
+```
 
 如果我们在这个表单中输入用户名密码，最终后台会将这个请求提交到UserServlet中，然后根据command=login，调用UserServlet中的login方法。在login方法中，会有这样的一段代码： 
 
-{% highlight java %}
+```java
 String name = request.getAttribute(“name”); 
 String password = request.getAttribute(“password”); 
 Boolean result = userService.hasUser(name, password); 
@@ -55,7 +55,7 @@ if(result) {
 } else { 
     .... 
 }
-{% endhighlight %}
+```
 
 我们可以发现，基本上这个servlet中，所有的方法几乎都有着从request中获取参数的这么一个过程，而且同一个servlet中，需要获取的参数大部分都是重叠的（比如UserServlet中，几乎所有的方法都需要获取name和password的值，才能进行近一步操作），既然每一个方法都有这么一个需求，为什么不考虑将这一过程抽象出来呢？
 
@@ -65,7 +65,7 @@ if(result) {
 
 然后我们可以重新设计UserServlet，创建全新的UserAction。（现已加入豪华午餐） 
 
-{% highlight java %}
+```java
 public UserAction { 
     String name; 
     String password; 
@@ -83,18 +83,18 @@ public UserAction {
     } 
     ...... //所有UserAction需要提供的方法 
 } //UserAction结束
-{% endhighlight %}
+```
 
 眼疾手快的人也许可以注意到一点：这个类不再需要接受HttpServletRequest及HttpServletResponse作为参数。每当我们有一个发送到UserAction的请求，AaronDispatcher就帮我们new一个新的UserAction实例，同时将请求中的参数赋给UserServlet中的属性。具体的底层做法，类似于下面这样：（实际上会复杂很多，不会直接new对象，而是使用反射来创建对象并赋值属性） 
 
-{% highlight java %}
+```java
 UserAction userAction = new UserAction(); 
 userAction.setName(request.getAttrbute(“name”)); 
 userAction.setPassword(request.getAttrbute(“password”)); 
 userAction.setNewpassword(request.getAttrbute(“newpassword”)); 
 userAction.setOldpassword(request.getAttrbute(“oldpassword”)); 
 ......
-{% endhighlight %}
+```
 
 如果我们需要登陆功能，直接调用userAction.login()就可以了（至于name和password，直接可以在方法内部获取当前对象属性）。 所有的方法中，从request中获取参数并进行封装的这么一个过程，全部都被巨牛叉的AaronDispatcher做了，是不是减少了很多重复的代码量？！
  
@@ -116,10 +116,10 @@ Struts2发展到今天已然是一个功能齐全的庞然大物了。
 
 首先讲述一下为什么会有所谓BLL（Business Logic Layer）和DAL（Dataaccess Layer）。在一个项目中，无论是查询用户的用户名，还是查询库存数量，这些数据终归是要保存到数据库的，而这些对数据库的操作将会无比的频繁，如果我们不将这些对数据库表的操作独立出来，如果在多个方法中存在着对一个用户记录的查询，我们不得不把这段代码copy、paste无数次，既然这样，我们为什么不像上面那样，将这种可能会多次遇到操作抽象出来呢？于是就有了所谓的DAL了，这样，无论在什么地方，需要用到数据库查询相关的工作的时候，仅仅需要这么做： 
 
-{% highlight java %}
+```java
 User user = userDaoImp.getUserById(userId); 
 ......
-{% endhighlight %}
+```
 
 这么做有一个好处：减少了因为持久化方案的更换而导致的代码修改带来的工作。 
 
@@ -147,22 +147,22 @@ User user = userDaoImp.getUserById(userId);
 
 比如，我们这次在DAL中，仅仅只定义了一个类： 
 
-{% highlight java %}
+```java
 public User { 
     long id; 
     String name; 
     String password; 
 }
-{% endhighlight %}
+```
 
 是的，剩下的事全部交给这个巨牛叉的框架来做了，当我们需要在UserService中查询一个用户记录的时候，我们只需要这么做： 
 
-{% highlight java %}
+```java
 //我们已经假设了框架巨牛叉，所有的DAL对象都是可以根据entity自动生成 
 AaronDao userDao = new AaronDao(User.class); 
 List<User> list = userDao.list(......) //括号里面是一些列条
 件，比如一些分页条件啊，属性限制啊之类的。
-{% endhighlight %}
+```
 
 哇~，生活瞬间变得很美好，这个巨牛叉的框架太棒了，只要定义好entity就可以完成以前需要成千上百行才能完成的功能，我连数据库的刷库脚本都不用写了~这么巨牛叉的框架一定会帮我们做好这些的。我恨不得马上就使用这个框架来开发我下的一个项目。
  
@@ -178,11 +178,11 @@ List<User> list = userDao.list(......) //括号里面是一些列条
 
 最早的时候，sun在提出servlet规范的时候，很多人是直接在servlet中完成接收参数，处理业务，从数据库或者本地文件中读取数据，最后打印出html返回。这个过程，大概会长成这个样子： 
 
-{% highlight java %}
+```java
 response.getWriter().println(“<html>”); 
 response.getWriter().println(“hello ” + user.name); 
 response.getWriter().println(“</html>”);
-{% endhighlight %}
+```
     
 不用怀疑，JSP出现之前很多大神早期真的都这么做过。 
 
@@ -190,7 +190,7 @@ response.getWriter().println(“</html>”);
 
 如果我们不剥离service对象（BLL），如果我们需要增加用户，我们需要在UserServlet中这样写： 
 
-{% highlight java %}
+```java
 public void doPost(HttpServletRequest request,  HttpServletResponse response){ 
     Strring cmd = request.getAttribute(“command”); 
     if (“addUser”.equals(request.getAttribute(cmd))) { 
@@ -207,7 +207,7 @@ public void doPost(HttpServletRequest request,  HttpServletResponse response){
         ...... 
     } 
 }
-{% endhighlight %}
+```
 
 这当中只有一个简单的逻辑：如果用户名已经存在，则返回到错误页面，告知用户添加新用户失败。如果用户名不存在，则返回到正确页面，告知用户添加新用户成功。
 
@@ -221,7 +221,7 @@ public void doPost(HttpServletRequest request,  HttpServletResponse response){
     
 还是修改源代码吧。。。 
 
-{% highlight java %}
+```java
 public void doPost(HttpServletRequest request, HttpServletResponse response){ 
     String cmd = request.getAttribute(“command”); 
     if (“addUser”.equals(cmd)) { 
@@ -231,19 +231,19 @@ public void doPost(HttpServletRequest request, HttpServletResponse response){
         userService.addUSer(); 
     } 
 } //结束doPost
-{% endhighlight %}
+```
 
 正如一开始所说，通过将servlet作为很薄的一层controller，真正的业务逻辑抛给service做，所有对业务的测试全部都可以简单的变为对service的测试。 
 
 比如我们可以简单的这样测试： 
 
-{% highlight java %}
+```java
 public static void main(String[] args) { 
     UserService userService = new UserService(); 
     User user = new User(name,password); 
     System.out.println(userService.addUser(user)); 
 }
-{% endhighlight %}
+```
 
 servlet中唯一要做的，就是根据service的返回结果，返回不同的UI展示。 
 
@@ -315,85 +315,85 @@ servlet中唯一要做的，就是根据service的返回结果，返回不同的
 
 因为我们的UserService是这样子导入的： 
 
-{% highlight java %}
+```java
 import com.unis.team1.UserService;
-{% endhighlight %}
+```
 
 而他们的UserServcice则需要这样子导入： 
 
-{% highlight java %}
+```java
 import com.unis.team2.UserService;
-{% endhighlight %}
+```
 
 于是，我们不得不全文搜索所有的地方， 将import
 
-{% highlight java %}
+```java
 import com.unis.team1.UserService
-{% endhighlight %}
+```
 
 改为
 
-{% highlight java %}
+```java
 import com.unis.team2.UserService
-{% endhighlight %}
+```
     
 如果很不凑巧，大家的命名方法不一样，另外一个小组的名字叫做
 
-{% highlight java %}
+```java
 import com.unis.team2.UserServ
-{% endhighlight %}
+```
 
 我就不得不全文搜索将import
 
-{% highlight java %}
+```java
 import com.unis.team1.UserService
-{% endhighlight %}
+```
 
 改为import 
 
-{% highlight java %}
+```java
 import com.unis.team2.UserServ
-{% endhighlight %}
+```
 
 同时，全文搜索将UserService改为UserServ
 
 这一切的一切的罪恶的根源，源于如下的代码： 
 
-{% highlight java %}
+```java
 import com.unis.team1.UserService; 
 public UserAction{ 
     UserService userService = new UserService(); 
     ....... //参考struts2中需要的东西 
 }
-{% endhighlight %}
+```
     
 是时候改动BLL了。 
     
 我们添加一个接口： 
 
-{% highlight java %}
+```java
 public interface IUSerService { 
     List<User> listUsers(); 
 }
-{% endhighlight %}
+```
 
 同时，无论是我们编写的com.unis.team1.UserService还是别的小组编写的com.unis.team2.UserServ，都实现了此IUSerService接口。 
     
 于是，导致罪恶的代码被修改为这样： 
 
-{% highlight java %}
+```java
 import com.unis.service.UserService; 
 public UserAction{ 
     IUserService userService; 
     ....... //参考struts2中需要的东西 
 }
-{% endhighlight %}
+```
 
 我们知道，java面向对象中多态的特性，可以这样子： 
 
-{% highlight java %}
+```java
 Animal cat = new Cat(); //Cat实现了Animal接口
-{% endhighlight %}
+```
     
 我相信，上面这个代码谁都知道，只可惜，不是所有人都能真正理解实现这个的意义。。。 
 
@@ -403,11 +403,11 @@ Animal cat = new Cat(); //Cat实现了Animal接口
  
 我们定义了如上的UserAction，但是实际上我们真正使用的UserAction并不是我们自己new出来的，而是每次有一个请求到来的时候，由Aaron MVC创建的，创建的过程可以这么去理解（实际上的情况要复杂的多，可以看出，Aaron MVC就是一个山寨版的struts2，action的创建远远比这个复杂！）： 
 
-{% highlight java %}
+```java
 UserAction userAction = new UserAction(); 
 IUserService userService = new UserService(); 
 userAction.setUserService(userService);
-{% endhighlight %}
+```
 
 好了，这样子，虽然我们没有在定义UserAction的代码中指定接口的具体实现，但是框架技术已经帮助我们把需要用的实现类给“注入”进去了。这样子，我们可以任意的在配置文件里面配置在“运行时”，具体使用哪一个接口的实现类。（虽然有点绕，还是好好理解这句话） 
 
@@ -423,29 +423,29 @@ userAction.setUserService(userService);
 
 上面已经说了，Aaron MVC会帮助我们自动生成Action，而当中如果有需要用的BLL中的接口，会被自动“注入”我们需要的实现类，我们修改一下这个过程： 
 
-{% highlight java %}
+```java
 UserAction userAction = new UserAction(); 
 IUserService userService = AaronContainer.get(IUserService.class) 
 userAction.setUserService(userService);
-{% endhighlight %}
+```
     
 也就是说
 
-{% highlight java %}
+```java
 IUserService userService = new UserService();
-{% endhighlight %}
+```
 
 这个过程，被替换为
 
-{% highlight java %}
+```java
 AaronContainer.get(IUserService.class);
-{% endhighlight %}
+```
 
 意义何为呢？（我又想说了。。。这真的只是给大家理解的过程而已，思想上接受就行了，真正的过程绝对比我所描写的这三行代码多几百倍） 
     
 先介绍一下可爱的代理模式吧。。。 
 
-{% highlight java %}
+```java
 public interface Test { 
     public void test(); 
 } 
@@ -471,14 +471,14 @@ public AaronTestProxy implements Test {
         this.doAfter(); 
     } 
 }
-{% endhighlight %}
+```
 
 我们原本有一个Test的实现类AaronTest，如果我们要调用AaronTest的test()方法，原本我们需要这么做： 
 
-{% highlight java %}
+```java
 Test test = new AaronTest(); 
 test.test();
-{% endhighlight %}
+```
 
 结果显而易见，打印出： 
 
@@ -486,10 +486,10 @@ test.test();
     
 但是如果我们使用代理类，我们可以这么做： 
 
-{% highlight java %}
+```java
 Test test = new AaronTestProxy(new AaronTest()); 
 test.test();
-{% endhighlight %}
+```
     
 结果打印出这样： 
 

@@ -55,7 +55,7 @@ tags : [work,interview]
 
     D. A::f()A::f()const
 
-{% highlight c %}
+```c
 class A
 {
   public:
@@ -94,7 +94,7 @@ int main()
     g(a);
     delete a ;
 }
-{% endhighlight %}
+```
 
 虽然没写过C++,不过这道题比较简单,选的B
 
@@ -138,7 +138,7 @@ int main()
 
     D. 11, 11
 
-{% highlight c %}
+```c
 {
   int x = 10 ;
   int y = 10 ;
@@ -146,7 +146,7 @@ int main()
   y = ++y ;
   printf("%d, %d\n",x,y);
 }
-{% endhighlight %}
+```
 
 选的D,但是不确定,回来试了下,gcc下输出的是11,11,我用Java试了下,输出的是10,11,可能是Java中间缓存变量的原因吧,所以还不清楚正确答案应该是什么
 
@@ -162,17 +162,17 @@ int main()
 
     D. overflow
 
-{% highlight java %}
+```java
   int [][] myArray3 =
   new int[3][]{
   new int[3]{5,6,2},
   new int[5]{6,9,7,8,3},
   new int[2]{3,2}};
-{% endhighlight %}
+```
 
 我选的D,回来一试,Eclipse提示错误Cannot define dimension expressions when an array initializer is provided.然后看了下Java中数组声明的规范,发现很多细节,以前从来没注意过.如下
 
-{% highlight java %}
+```java
 //如要一个{1,2,3}的数组
 int[3] array = {1,2,3};//错误
 int[] array = {1,2,3};//可以
@@ -182,7 +182,7 @@ int[] array;array = {1,2,3};//错误
 int[3] array;array = new int[]{1,2,3};//错误
 int[] array;array = new int[3]{1,2,3};//错误
 int[] array;array = new int[]{1,2,3};//可以
-{% endhighlight %}
+```
 
 从上面几个例子很容易看出来,在Java中声明或者初始化一个数组时,不能显式的指定数组大小.当声明和初始化语句分开时,只能通过new语句来初始化.
 
@@ -216,7 +216,7 @@ int[] array;array = new int[]{1,2,3};//可以
 
     D. 21212121
 
-{% highlight c %}
+```c
   #include <iostream>
 
   class A{
@@ -253,7 +253,7 @@ int[] array;array = new int[]{1,2,3};//可以
 
       return 0;
   }
-{% endhighlight %}
+```
 
 感觉有陷阱,但是觉得还是D比较靠谱,就选了D,回来一试,结果是22221111,真心不懂,求大神解释了.
 

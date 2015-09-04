@@ -12,7 +12,7 @@ Chrome 扩展程序 OSChina Notifier 可以显示用户在开源中国的未读�
 
 ### api.js
 
-{% highlight javascript %}
+```js
 (function() {
 	'use strict';
 
@@ -44,11 +44,11 @@ Chrome 扩展程序 OSChina Notifier 可以显示用户在开源中国的未读�
 	};
 
 })();
-{% endhighlight %}
+```
 
 ### main.js
 
-{% highlight javascript %}
+```js
 (function() {
 	'use strict';
 
@@ -85,7 +85,7 @@ Chrome 扩展程序 OSChina Notifier 可以显示用户在开源中国的未读�
 	update();
 
 })();
-{% endhighlight %}
+```
 
 原理其实很简单,但是期间还是有些感受.
 

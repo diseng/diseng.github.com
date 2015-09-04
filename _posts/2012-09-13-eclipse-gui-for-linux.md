@@ -57,9 +57,11 @@ Google了一下,尝试了2种方案,第一种在debian6下以失败告终,第二
 
 创建启动脚本eclipse.sh,内容如下
 
-	#!/bin/sh
-	export MY_ECLIPSE_GTKRC=/path/to/gtkrc4eclipse
-	export GTK_RC_FILES=$GTK_RC_FILES:$MY_ECLIPSE_GTKRC
-	export GTK2_RC_FILES=$GTK2_RC_FILES:$MY_ECLIPSE_GTKRC
-	/path/to/eclipse &
+```bash
+#!/bin/sh
+export MY_ECLIPSE_GTKRC=/path/to/gtkrc4eclipse
+export GTK_RC_FILES=$GTK_RC_FILES:$MY_ECLIPSE_GTKRC
+export GTK2_RC_FILES=$GTK2_RC_FILES:$MY_ECLIPSE_GTKRC
+/path/to/eclipse &
+```
 

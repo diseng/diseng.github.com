@@ -54,9 +54,9 @@
 
           <div class="nav-collapse">
             <ul class="nav">
-              {% assign pages_list = site.pages %}
-              {% assign group = 'navigation' %}
-              {% include JB/pages_list %}
+              <li><a href="/archive.html">Archive</a></li>
+              <li><a href="/categories.html">Categories</a></li>
+              <li><a href="/tags.html">Tags</a></li>
             </ul>
             <ul class="nav pull-right social visible-desktop">
               <li class="divider-vertical"></li>
@@ -121,12 +121,12 @@
       </div>
 
       <footer>
-        <p>&copy; {{ site.author.name }} 2015 
+        <p>&copy; {{ site.author.name }} 2011~2015 
           with help from <a href="http://jekyllbootstrap.com" target="_blank" title="The Definitive Jekyll Blogging Framework">Jekyll Bootstrap</a>
           and <a href="http://github.com/dhulihan/hooligan" target="_blank">The Hooligan Theme</a>
         </p>
       </footer>
     </div> <!-- /container -->
-    {% include JB/analytics %}
+    <!-- {% include JB/analytics %} -->
   </body>
 </html>

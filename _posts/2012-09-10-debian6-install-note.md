@@ -21,9 +21,11 @@ tags : [linux]
 
 ### 1.把home下的文件名改成英文
 
-	export LANG=en_US  
-	xdg-user-dirs-gtk-update  
-	export LANG=zh_CN.UTF-8 
+```bash
+export LANG=en_US  
+xdg-user-dirs-gtk-update  
+export LANG=zh_CN.UTF-8 
+```
 
 ### 2.字体美化
 
@@ -37,23 +39,25 @@ tags : [linux]
 
 代码:
 
-	mkdir build_cairo && cd build_cairo
-	sudo apt-get source cairo
-	sudo aptitude build-dep cairo
-	sudo aptitude install  devscripts
-	wget http://archive.ubuntu.com/ubuntu/pool/main/c/cairo/cairo_1.8.10-2ubuntu1.debian.tar.gz
-	tar xvf cairo_1.8.10-2ubuntu1.debian.tar.gz
-	cd cairo-1.8.10 && patch -Np1 <../debian/patches/04_lcd_filter.patch
-	dch -l local "LCD Patch"
-	fakeroot debian/rules binary
-	cd .. && sudo dpkg -i *.deb 
+```bash
+mkdir build_cairo && cd build_cairo
+sudo apt-get source cairo
+sudo aptitude build-dep cairo
+sudo aptitude install  devscripts
+wget http://archive.ubuntu.com/ubuntu/pool/main/c/cairo/cairo_1.8.10-2ubuntu1.debian.tar.gz
+tar xvf cairo_1.8.10-2ubuntu1.debian.tar.gz
+cd cairo-1.8.10 && patch -Np1 <../debian/patches/04_lcd_filter.patch
+dch -l local "LCD Patch"
+fakeroot debian/rules binary
+cd .. && sudo dpkg -i *.deb 
+```
 
 
 字体配置设置
 
 ~/.fonts.conf'里添加下面内容（'~/.fonts.conf'默认没有需要自己新建） 代码:
 
-{% highlight xml %}
+```xml
 <?xml version='1.0'?>
 <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
 <fontconfig>
@@ -83,7 +87,7 @@ tags : [linux]
 		</edit>
 	</match>
 </fontconfig> 
-{% endhighlight %}
+```
 
 字体细节设置
 
@@ -91,7 +95,9 @@ tags : [linux]
 
 安装文泉驿微米黑:
 
-	sudo apt-get install ttf-wqy-microhei 
+```bash
+sudo apt-get install ttf-wqy-microhei 
+```
 
 ### 3.解决声音问题
 
@@ -103,11 +109,15 @@ Realtek官网下载驱动（64位需使用2.6.24那个版本,我的无线网卡�
 
 安装内核头文件:
 
-	sudo apt-get install linux-headers-XXX 
+```bash
+sudo apt-get install linux-headers-XXX 
+```
 
 安装编译开发基本组件:
 
-	sudo apt-get install build-essential 
+```bash
+sudo apt-get install build-essential 
+```
 
 按照readme.txt进行make,make install,reboot
 
@@ -119,19 +129,25 @@ Realtek官网下载驱动（64位需使用2.6.24那个版本,我的无线网卡�
 
 ### 7.安装笔记本触摸板管理软件TrackPoint and TouchPad Tweeks
 
-	sudo apt-get install gpointing-device-settings 
+```bash
+sudo apt-get install gpointing-device-settings 
+```
 
 ### 8.安装火狐
 
 编辑/etc/apt/source.list并添加
 
-	#Mint packages
-	deb http://packages.linuxmint.com debian import
+```bash
+#Mint packages
+deb http://packages.linuxmint.com debian import
+```
 
 执行:
 
-	sudo apt-get update
-	sudo apt-get install firefox
+```bash
+sudo apt-get update
+sudo apt-get install firefox
+```
 
 ### 9. 删除桌面图标
 
@@ -141,4 +157,6 @@ Realtek官网下载驱动（64位需使用2.6.24那个版本,我的无线网卡�
 
 ### 10.基本完成,其他的看个人需要了
 
-	sudo apt-get install vim preload smplayer
+```bash
+sudo apt-get install vim preload smplayer
+```

@@ -12,7 +12,7 @@ PlayOnConsole是我于2013年3月17日开发而来。起因是我最初使用cal
 
 最开始我选的是站内应用(那时候都不知道站内应用和网页应用的区别),开发起来倒不难,现成的新浪微博SDK for Java,已经把基础性的工作全封装好了,我只需要去实现我自己的程序逻辑就行.大家都知道要玩一个应用,需要给这个应用授权,但是那个授权页面得是自己的,我当时就在github blog上传了一个页面做授权回调用,写了个js函数,把授权回调URL中的code参数拿出来.
 
-{% highlight javascript %}
+```js
 function GetParam()
 {	
 	var url = document.location.href;	
@@ -23,7 +23,7 @@ function GetParam()
 	}
 	document.write(code);
 }
-{% endhighlight %}
+```
 
 到这里整个应用就完成的差不多了,接下去需要提交审核应用了.由于选的是站内应用,新浪微博官方会为这个应用建立一个介绍页面,但是这个介绍页面其实也是需要你自己做的,新浪只负责把你的页面嵌入到官方的介绍页面.同样,我又往github blog上传了个应用的介绍页面.然后就开始第一次提交审核了.
 

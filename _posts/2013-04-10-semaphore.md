@@ -20,7 +20,7 @@ tags : [program,c]
 
 哲学家从来不交谈，这就很危险，可能产生死锁，每个哲学家都拿着左手的餐叉，永远都在等右边的餐叉（或者相反）。即使没有死锁，也有可能发生资源耗尽。例如，假设规定当哲学家等待另一只餐叉超过五分钟后就放下自己手里的那一只餐叉，并且再等五分钟后进行下一次尝试。这个策略消除了死锁（系统总会进入到下一个状态），但仍然有可能发生“活锁”。如果五位哲学家在完全相同的时刻进入餐厅，并同时拿起左边的餐叉，那么这些哲学家就会等待五分钟，同时放下手中的餐叉，再等五分钟，又同时拿起这些餐叉。
 
-{% highlight c %}
+```c
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -68,13 +68,13 @@ int main(void){
 	while(!getchar());
 	return 0;
 }
-{% endhighlight %}
+```
 
 ### 简单互斥问题 
 
 四个进程A、B、C、D都要读一个共享文件F，系统允许多个进程同时读文件F。但限制是进程A和进程C不能同时读文件F，进程B和进程D也不能同时读文件F。为了使这四个进程并发执行时能按系统要求使用文件，现用P、V操作进行管理 
 
-{% highlight c %}
+```c
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -123,13 +123,13 @@ int main(void){
 	while(!getchar());
 	return 0;
 }
-{% endhighlight %}
+```
 
 ### 阅览室问题
 
 有一阅览室，读者进入时必须先在一张登记表上进行登记，该表为每一座位列一表目，包括座号和读者姓名。读者离开时要消掉登记信号，阅览室中共有100个座位。用PV操作控制这个过程
 
-{% highlight c %}
+```c
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -209,13 +209,13 @@ int main(void){
 	while(!getchar());
 	return 0;
 }
-{% endhighlight %}
+```
 
 ### 理发师问题
 
 理发店理有一位理发师、一把理发椅和n把供等候理发的顾客坐的椅子.如果没有顾客，理发师便在理发椅上睡觉。一个顾客到来时，它必须叫醒理发师.如果理发师正在理发时又有顾客来到，则如果有空椅子可坐，就坐下来等待，否则就离开。
 
-{% highlight c %}
+```c
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -323,13 +323,13 @@ int main(void){
 	while(!getchar());
 	return 0;
 }
-{% endhighlight %}
+```
 
 ### 多理发师问题
 
 Three chairs.Three barbers.Waiting area having capacity for four seats and additional space for customers to stand and wait.Fire code limits the total number of customers (seating +standing).Customer cannot enter if pack to capacity.When a barber is free, customer waiting longest on the sofa can be served.If there are any standing customer, he can now occupy the seat on the sofa.Once a barber finished haircut, any barber can take the payment.As there is only one cash register, so payment from one customer is accepted at a time.Barber(s) time is divided into haircut, accepting payment and waiting for customers (sleeping).
 
-{% highlight c %}
+```c
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -487,4 +487,4 @@ int main(void){
 	while(!getchar());
 	return 0;
 }
-{% endhighlight %}
+```

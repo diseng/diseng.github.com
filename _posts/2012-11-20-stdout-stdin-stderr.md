@@ -8,7 +8,9 @@ tags : [program]
 
 鸟哥的书籍里有个创建用户的shell脚本,里面有句是设置用户密码的,为
 
-	echo "password" | passwd --stdin $username
+```bash
+echo "password" | passwd --stdin $username
+```
 
 那么这个--stdin是什么意思呢?原来passwd默认是不能直接从terminal接受字符的,只有加了--stdin才能接受.
 
@@ -28,11 +30,15 @@ tags : [program]
 
 对于这三个数据流来说，默认是表现在用户终端上的，比如我们在c中使用fprintf:
 
-	fprintf(stdout,"hello world!\n");
+```c
+fprintf(stdout,"hello world!\n");
+```
 
 屏幕上将打印出"hello world!"来，同样，我们使用(下面的代码会接收用户输入在终端里的字符，并存在ptr中):
 
-	fread(ptr,1,10, stdin);
+```c
+fread(ptr,1,10, stdin);
+```
 
 那么标准输入输出和错误是不是只能反应在终端里呢？答案是不是的！我们可以将标准输入和输出重定位到文件中：
 
@@ -74,11 +80,13 @@ tags : [program]
 
 问题：下面程序的输出是什么？（intel笔试2011）
 
-	int main(){
-	    fprintf(stdout,"Hello ");
-	    fprintf(stderr,"World!");
-	    return 0;
-	}
+```c
+int main(){
+    fprintf(stdout,"Hello ");
+    fprintf(stderr,"World!");
+    return 0;
+}
+```c
 
 解答：这段代码的输出是什么呢？你可以快速的将代码敲入你电脑上（当然，拷贝更快），然后发现输出是
 

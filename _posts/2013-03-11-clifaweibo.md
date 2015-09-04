@@ -12,7 +12,7 @@ tags : [program,go]
 
 发现GO没有包自带substring功能，但是对微博分片需要用到这种功能，于是就现学现用了。
 
-{% highlight go %}
+```go
 func substring(s string, start int, length int) string {
         by := []byte(s)
         i:=0
@@ -43,11 +43,11 @@ func substring(s string, start int, length int) string {
         }   
         return s[ii: i]
 }
-{% endhighlight %}
+```
 
 有了substring，接下去只要对微博计算一下需要分割成几片就行了。
 
-{% highlight go %}
+```go
 func send_divided_text_weibo(text string) bool {
 	divided_number := (utf8.RuneCountInString(text) + weibo_text_length - 1) / weibo_text_length
 	for i := 0 ; i < divided_number ; i++ {
@@ -62,7 +62,7 @@ func send_divided_text_weibo(text string) bool {
 	}		
 	return true
 }
-{% endhighlight %}
+```
 
 最初没有`time.Sleep(5000 * time.Millisecond)`这一句，结果测试的时候始终只能发送出去第一条分片，因此我还请教了JessonChan。后面我猜想可能是微博API的限制，不允许短时间内发送多条微博（这个可能性比较小）或者是http.Post()返回结果需要一定的时间，于是加了睡眠5秒。经测试，分片发送成功。
 

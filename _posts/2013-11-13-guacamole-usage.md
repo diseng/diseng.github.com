@@ -42,14 +42,14 @@ Guacamole使用VNC、RDP等远程桌面协议来提供桌面环境的访问。Gu
 
 **5.修改/etc/guacamole/user-mapping.xml**
 
-{% highlight xml %}
+```xml
 	<authorize username="web登录用户名" password="web登录密码">
             <protocol>vnc</protocol>
             <param name="hostname">localhost</param>
             <param name="port">第4步中的vnc端口号</param>
             <param name="password">第4步中设置的vnc密码</param>
     </authorize> 
-{% endhighlight %}
+```
 
 **6.重启tomcat**
 

@@ -14,8 +14,8 @@ tags : [linux]
 
 出错的原因是"Nadia"启动是将软盘驱动作为模块载入到了内核,我们只需把这个模块拉入黑名单,不让它载入就行了.解决方法记录如下:
 
-{% highlight bash %}
+```bash
 echo "blacklist floppy" | sudo tee /etc/modprobe.d/blacklist-floppy.conf
 sudo rmmod floppy
 sudo update-initramfs -u
-{% endhighlight %}
+```

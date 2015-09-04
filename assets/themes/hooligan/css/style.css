@@ -165,18 +165,13 @@ hr {
   background-color: rgba(0, 0, 0, 0.3);
   border: none;
   padding: 20px 20px 10px;
-  margin: 0px -20px 20px;
+  margin: 20px -20px 20px;
   z-index: 0;
-  -moz-border-radius-bottomleft: 5px;
-  -webkit-border-bottom-left-radius: 5px;
-  -ms-border-bottom-left-radius: 5px;
-  -o-border-bottom-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  -moz-border-radius-bottomright: 5px;
-  -webkit-border-bottom-right-radius: 5px;
-  -ms-border-bottom-right-radius: 5px;
-  -o-border-bottom-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
 }
 /* line 155, ../_sass/_base.scss */
 .page-header h1 {
@@ -402,4 +397,26 @@ div.sidebar section img.icon {
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
   border-radius: 5px;
+}
+
+.span8 table {
+    border:#ccc 1px solid;
+    border-radius:3px;
+}
+
+.span8 table th {
+    padding:21px 25px 22px 25px;
+    border-top:1px solid #fafafa;
+    border-bottom:1px solid #e0e0e0;
+}
+
+.span8 table tr {
+    padding-left:20px;
+}
+
+.span8 table td {
+    padding:18px;
+    border-top: 1px solid #ffffff;
+    border-bottom:1px solid #e0e0e0;
+    border-left: 1px solid #e0e0e0;
 }

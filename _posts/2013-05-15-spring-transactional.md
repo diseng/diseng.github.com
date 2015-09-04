@@ -12,31 +12,31 @@ tags : [program,java]
 
 ### 1.建表
 
-{% highlight sql %}
+```sql
 create table student
 (
    sid                  int not null auto_increment,
    username             varchar(10),
    primary key (sid)
 );
-{% endhighlight %}
+```
 
 我建立了一个学生表,只有sid和username两个字段,为了便于测试,我将username长度设置为10.
 
 ### 2.Service方法
 
-{% highlight java %}
+```java
 @Transactional
 public void addStudent(Student stu) {
     stuMap.insertSelective(stu);
 }
-{% endhighlight %}
+```
 
 这是一个添加学生的方法,其中stuMap是Student的DAO操作类.
 
 ### 3.测试方法
 
-{% highlight java %}
+```java
 @Test
 public void testAddStudent(){
     Student s = new Student();
@@ -45,7 +45,7 @@ public void testAddStudent(){
     s.setUsername("testlongusername");
     stu.addStudent(s);
 }
-{% endhighlight %}
+```
 
 测试方法中调用了2次addStudent方法,其中第二次的username长度大于10,插入将会失败.
 
@@ -65,7 +65,7 @@ public void testAddStudent(){
 
 ### 4.修改Service和测试方法
 
-{% highlight java %}
+```java
 @Transactional
 public void addStudent(Student stu) {
     stuMap.insertSelective(stu);
@@ -73,18 +73,18 @@ public void addStudent(Student stu) {
     s.setUsername("testlongusername");
     stuMap.insertSelective(s);
 }
-{% endhighlight %}
+```
 
 修改后的addStudent方法,在执行第二次insertSelective方法时,会报错,将会使得整个事务回滚,来修改一下测试方法
 
-{% highlight java %}
+```java
 @Test
 public void testAddStudent(){
     Student s = new Student();
     s.setUsername("test");
     stu.addStudent(s);
 }
-{% endhighlight %}
+```
 
 执行测试方法,依然报出步骤3中的错误,查看数据库内容
 
@@ -100,7 +100,7 @@ public void testAddStudent(){
 
 步骤4中确实有了事务管理作用,那去掉@Transactional注解,情况又会怎么样呢?
 
-{% highlight java %}
+```java
 //@Transactional
 public void addStudent(Student stu) {
     stuMap.insertSelective(stu);
@@ -108,7 +108,7 @@ public void addStudent(Student stu) {
     s.setUsername("testlongusername");
     stuMap.insertSelective(s);
 }
-{% endhighlight %}
+```
 
 执行步骤4中的测试方法,依然会报出步骤3中的错误,查看数据库内容
 

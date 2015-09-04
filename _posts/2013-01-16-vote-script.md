@@ -16,7 +16,7 @@ tags : [program,php]
 	2 需要提交的键值
 
 下面是脚本代码:
-{% highlight php %}
+```php
 <?php
 for($count = 0; $count < 10000; $count++) {
 	//sleep(1)
@@ -52,6 +52,6 @@ for($count = 0; $count < 10000; $count++) {
 	echo "\n";
 }
 ?>
-{% endhighlight %}
+```
 
 以上代码仅供交流学习,不要乱用哈!

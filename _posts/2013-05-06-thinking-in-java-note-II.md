@@ -31,7 +31,7 @@ Buffer由数据和可以高效地访问及操纵这些数据的四个索引组�
 
 ### 3.读写例子
 
-{% highlight java %}
+```java
 import java.nio.*;
 import java.nio.channels.*;
 import java.io.*;
@@ -54,13 +54,13 @@ public class ChannelCopy {
     }
   }
 } ///:~
-{% endhighlight %}
+```
 
 当FileChannel.read()放回-1时,表示达到了输入的末尾.每次read()操作,会将数据输入到缓冲器中,flip()则是准备缓冲器以便它的信息可以由write()提取.clear()操作则对所以内部指针进行重新安排.
 
 上面的操作也可以用特殊方法transferTo()和transferFrom()将两个通道相连:
 
-{% highlight java %}
+```java
 import java.nio.channels.*;
 import java.io.*;
 
@@ -78,11 +78,11 @@ public class TransferTo {
     // out.transferFrom(in, 0, in.size());
   }
 } ///:~
-{% endhighlight %}
+```
 
 ### 4.转换数据
 
-{% highlight java %}
+```java
 import java.nio.*;
 import java.nio.channels.*;
 import java.nio.charset.*;
@@ -136,7 +136,7 @@ Decoded using GBK: Some text
 Some text
 Some text口口口
 *///:~
-{% endhighlight %}
+```
 
 缓冲器容纳的是普通的字节,为了把他们转换成字符,我们要么在输入它们的时候对其进行编码(这样,它们输出时才具有意义),要么在将其从缓冲器输出时对它们进行解码.
 
@@ -144,7 +144,7 @@ Some text口口口
 
 尽管ByteBuffer只能保存字节类型的数据,但是它具有可以从其所容纳的字节中产生出各种不同基本类型值的方法.下面的例子展示了怎样用这些方法来插入和抽取各种数值:
 
-{% highlight java %}
+```java
 import java.nio.*;
 
 public class GetData {
@@ -195,7 +195,7 @@ H o w d y !
 9.9471144E7
 9.9471142E7
 *///:~
-{% endhighlight %}
+```
 
 ### 6.视图缓冲器
 
@@ -205,7 +205,7 @@ H o w d y !
 
 尽管"旧"的I/O流在用nio实现后性能有所提高,但是"映射文件访问"往往可以更加显著地加快速度.下面的程序进行了简单的性能比较:
 
-{% highlight java %}
+```java
 import java.nio.*;
 import java.nio.channels.*;
 import java.io.*;
@@ -313,7 +313,7 @@ Mapped Read: 0.04
 Stream Read/Write: 7.32
 Mapped Read/Write: 0.01
 *///:~
-{% endhighlight %}
+```
 
 ### 8.Arrays实用功能
 

@@ -8,17 +8,21 @@ tags : [linux]
 
 ### 1.解决debian6挂起后无法唤醒:
 
-	添加文件:
-	vim /etc/pm/config.d/10no-vt-switch
-	文件内容:
-	ADD_PARAMETERS="--quirk-no-chvt"
+```bash
+#添加文件
+vim /etc/pm/config.d/10no-vt-switch
+#文件内容
+ADD_PARAMETERS="--quirk-no-chvt"
+```
 
 ### 2.debian下禁用adsl的ifupdown:
 
 检查一下/etc/network/interfaces文件，除以下两行外，其他全部注释掉:
 
-	auto lo
-	iface lo inet loopback
+```bash
+auto lo
+iface lo inet loopback
+```
 
 ### 3.解决debian下看acfun评论乱码:
 
@@ -39,16 +43,20 @@ tags : [linux]
 
 ### 6.解决debian与win7双系统时间错误
 
-	修改文件:
-	sudo gedit /etc/default/rcS
-	将UTC=yes改成UTC=no
+```bash
+#修改文件
+sudo gedit /etc/default/rcS
+#将UTC=yes改成UTC=no
+```
 
 ### 7.修改debian开机grub分辨率
 
-	修改文件:
-	sudo vim /etc/default/grub
-	在#GRUB_GFXMODE=640x480下添加GRUB_GFXMODE=1366x768
-	sudo update-grub
+```bash
+#修改文件
+sudo vim /etc/default/grub
+#在#GRUB_GFXMODE=640x480下添加GRUB_GFXMODE=1366x768
+sudo update-grub
+```
 
 另外:debian的默认grub背景,登录界面背景,桌面背景都在/usr/share/images/desktop-base/目录下
 

@@ -34,7 +34,7 @@ SIP测试通常包括覆盖率测试、语音质量测试、安全测试、稳�
 
 其中具体执行呼叫的方法体如下：
 
-{% highlight lua %}
+```lua
 function call( callee )
     --呼叫字符串
     local callStr = "这里是具体的呼叫字符串"
@@ -56,7 +56,7 @@ function call( callee )
             freeswitch.consoleLog("notice", "call fail,cause:"..cause..",causeQ850:"..causeQ850.."\n");
     end
 end
-{% endhighlight %}
+```
 
 
 ### 4. 如何按照会话进行抓包
@@ -69,7 +69,7 @@ end
 
 使用如下命令即会监听eth0网卡，并将pcap文件写在/home/admin/pcap目录下
 
-```
+```bash
 sudo pcapsipdump -i eth0 -d /home/admin/pcap
 ```
 
@@ -81,7 +81,7 @@ sudo pcapsipdump -i eth0 -d /home/admin/pcap
 
 使用下面的命令，可以查看该会话的所有SIP信息
 
-{% highlight bash %}
+```bash
 tshark -Y sip -r pcapFile
 # output
 # 1   0.000000 198.xxx.xxx.xxx -> 202.xxx.xxx.xxx SIP/SDP 1137 Request: INVITE sip:390115170171@202.xxx.xxx.xxx:5060 |
@@ -92,24 +92,24 @@ tshark -Y sip -r pcapFile
 # 6   8.582468 198.xxx.xxx.xxx -> 202.xxx.xxx.xxx SIP 458 Request: ACK sip:390115170171@202.xxx.xxx.xxx:5060 |
 # 7  15.702624 202.xxx.xxx.xxx -> 198.xxx.xxx.xxx SIP 417 Request: BYE sip:gw+gwName@198.xxx.xxx.xxx:5080;transport=udp;gw=gwName |
 # 8  15.703204 198.xxx.xxx.xxx -> 202.xxx.xxx.xxx SIP 477 Status: 200 OK |
-{% endhighlight %}
+```
 
 
 而一般情况下，我们只需要获取最终状态即可，可以使用如下命令对内容进行筛选
 
-{% highlight bash %}
+```bash
 tshark -Y sip -r pcapFile|grep 'Status'|tail -n 1|awk -F '[:|]' '{print $2}'
 # output
 # 200 OK
-{% endhighlight %}
+```
 
 除了获取该会话的最终状态，该会话的呼叫号码也是很重要的一个信息，我们依然可以从SIP信息中筛选中呼叫号码
 
-{% highlight bash %}
+```bash
 tshark -Y "sip.Method == INVITE" -r pcapFile|head -n 1|awk -F '[:@+]' '{print $3}'
 # output
 # 390115170171
-{% endhighlight %}
+```
 
 有了呼叫号码以及对应的会话最终状态，写一个小程序来分析统计各个国家或者各个省市的呼叫成功率，失败率，失败原因自然不是什么难事。
 
@@ -123,7 +123,7 @@ tshark -Y "sip.Method == INVITE" -r pcapFile|head -n 1|awk -F '[:@+]' '{print $3
 
 有了上述两个软件，使用下面的shell脚本即可从pcap文件中提取出wav音频文件，其原理是用tshark读取出双向的rtp.ssrc，分别处理，并取出rtp.payload的HEX值，生成raw文件，然后用sox转成wav文件
 
-{% highlight bash %}
+```bash
 if [ -z $1 ] ; then
     echo "`basename $0` {pcap-file}"
     exit
@@ -147,7 +147,7 @@ do
 done
 rm *.payloads *.raw
 sox -mM $A.wav $B.wav $A-$B.wav
-{% endhighlight %}
+```
 
 
 不要忘记上一节中提到的获取呼叫号码的方法，使用号码来归类存放音频文件，方便后续人为打分
@@ -156,7 +156,7 @@ sox -mM $A.wav $B.wav $A-$B.wav
 
 使用tshark可以对pcap文件中RTP报文进行统计，分析得出丢包率、抖动率、最大时延、平均时延等数据
 
-{% highlight bash %}
+```bash
 tshark -q -z rtp,streams -r pcapFile
 # output
 # ========================= RTP Streams ========================
@@ -164,17 +164,17 @@ tshark -q -z rtp,streams -r pcapFile
 #  202.xxx.xxx.xxx 28106  198.xxx.xxx.xxx 29728 0x1F62A4A1 ITU-T G.711 PCMU  1055     0 (0.0%)           20.75            0.17            0.05 X
 #  198.xxx.xxx.xxx 29728  202.xxx.xxx.xxx 28106 0x99E37E4A ITU-T G.711 PCMU   975     0 (0.0%)           21.05            0.31            0.03 X
 # ==============================================================
-{% endhighlight %}
+```
 
 
 我们只需要取出其中的Src IP addr、Dest IP addr、Payload、Pkts、Lost、Max Delta(ms)、Max Jitter(ms)、Mean Jitter(ms)字段即可。
 
-{% highlight bash %}
+```bash
 tshark -q -z rtp,streams -r pcapFile|sed -n '3,4p'|awk '{print $1,$3,$8,$9,$10$11,$12,$13,$14}'
 # output
 # 202.xxx.xxx.xxx 198.xxx.xxx.xxx PCMU 1055 0(0.0%) 20.75 0.17 0.05
 # 198.xxx.xxx.xxx 202.xxx.xxx.xxx PCMU 975 0(0.0%) 21.05 0.31 0.03
-{% endhighlight %}
+```
 
 依然不要忘记上一节中提到的获取呼叫号码的方法，将号码与其对应的RTP数据包的丢包率、抖动率、最大时延、平均时延关联起来分析
 

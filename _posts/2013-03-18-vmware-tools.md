@@ -12,7 +12,7 @@ VMware Workstation8中的vmware-tools在高版本Linux内核环境下，有些�
 
 例如老版本ethtool.h中结构体ethtool_ops声明如下：
 
-{% highlight c++ %}
+```cpp
 struct ethtool_ops {
         int     (*get_settings)(struct net_device *, struct ethtool_cmd *);
         int     (*set_settings)(struct net_device *, struct ethtool_cmd *);
@@ -81,11 +81,11 @@ struct ethtool_ops {
         int     (*set_dump)(struct net_device *, struct ethtool_dump *);
 
 };
-{% endhighlight %}
+```
 
 新版本声明如下：
 
-{% highlight c++ %}
+```cpp
 struct ethtool_ops {
         int     (*get_settings)(struct net_device *, struct ethtool_cmd *);
         int     (*set_settings)(struct net_device *, struct ethtool_cmd *);
@@ -158,7 +158,7 @@ struct ethtool_ops {
                                  struct ethtool_dump *, void *);
         int     (*set_dump)(struct net_device *, struct ethtool_dump *);
 };
-{% endhighlight %}
+```
 
 主要是vmhgfs和vmxnet两个模块的错误，将编译出错的字段删除即可。
 

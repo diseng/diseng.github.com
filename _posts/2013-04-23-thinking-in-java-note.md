@@ -20,7 +20,7 @@ concurrent这部分以前从来没看过,所以这次重点看了这一部分,�
 
 	在java中，标签起作用的唯一的地方刚好是在迭代语句之前。“刚好之前”的意思表明，在标签和迭代之间置入任何语句都不好。在迭代之前设置标签的唯一理由：我们希望在其中嵌套另一个迭代或者一个开关。这是由于break和continue关键词通常只中断当前循环，但若随同标签一起使用，它们就会中断循环，直到标签所在的地方。
 
-{% highlight java %}
+```java
 public class LabeledFor {
 	public static void main(String[] args) {
 		int i = 0;
@@ -64,7 +64,7 @@ public class LabeledFor {
  * i = 4 continue inner i = 5 continue inner i = 6 continue inner i = 7 continue
  * outer i = 8 break outer
  *///:~
- {% endhighlight %}
+```
 
 ### 2.后期绑定
 
@@ -73,7 +73,7 @@ public class LabeledFor {
 
 ### 3.缺陷:"覆盖"私有方法
 
-{% highlight java %}
+```java
 public class PrivateOverride {
   private void f() { System.out.println("private f()"); }
   public static void main(String[] args) {
@@ -87,7 +87,7 @@ class Derived extends PrivateOverride {
 } /* Output:
 private f()
 *///:~
-{% endhighlight %}
+```
 
 	我们所期望的输出是public f()，但是由于private方法被自动认为是final方法，而且对导出类是屏蔽的。因此，在这种情况下，Derived类中的f()方法就是一个全新的方法；既然基类中的f()方法在子类Derived中不可见，因此甚至也不能被重载。 
 	结论就是：只有非private方法才可以被覆盖；但是还需要密切注意覆盖private方法的现象，这时虽然编译器不会报错，但是也不会按照我们所期望的来执行。确切地说，在导出类中，对于基类中的private方法，最好采用不同的名字。
@@ -96,7 +96,7 @@ private f()
 
 	一旦您了解了多态机制，可能就会开始认为所有事物都可以多态地发生。然而，只有普通的方法调用可以是多态的。例如，如果您直接访问某个域，这个访问就将在编译期进行解析，就像下面的示例所演示的：
 
-{% highlight java %}
+```java
 class Super {
   public int field = 0;
   public int getField() { return field; }
@@ -124,7 +124,7 @@ public class FieldAccess {
 sup.field = 0, sup.getField() = 1
 sub.field = 1, sub.getField() = 1, sub.getSuperField() = 0
 *///:~
-{% endhighlight %}
+```
 
 	当Sub对象转型为Super引用时，任何域访问操作都将由编译器解析，因此不是多态的。在本例中，为Super.field和Sub.field分配了不同的存储空间。这样，Sub实际上包含两个称为field的域：它自己的和它从Super处得到的。然而，在引用Sub中的field时所产生的默认域并非Super版本的field域。因此，为了得到Super.field，必须显式地指明super.field。
 	尽管这看起来好像会成为一个容易令人混淆的问题，但是在实践中，它实际上从来不会发生。首先，您通常会将所有的域都设置成private，因此不能直接访问它们，其副作用是只能调用方法来访问。另外，您可能不会对基类中的域和导出类中的域赋予相同的名字，因为这种做法容易令人混淆。
@@ -141,7 +141,7 @@ sub.field = 1, sub.getField() = 1, sub.getSuperField() = 0
 
 ### 6.构造器内部的多态方法的行为
 
-{% highlight java %}
+```java
 class Glyph {
 	void draw() {
 		System.out.println("Glyph.draw()");
@@ -177,7 +177,7 @@ RoundGlyph.draw(), radius = 0
 Glyph() after draw()
 RoundGlyph.RoundGlyph(), radius = 5
 *///:~
-{% endhighlight %}
+```
 
 初始化的实际过程：
 
@@ -193,7 +193,7 @@ RoundGlyph.RoundGlyph(), radius = 5
 
 	在某些程序设计语言(如c++)中，我们必须执行一个特殊的操作来获得安全的向下转型。但是在Java语言中，所有转型都会得到检查!所以即使我们只是进行一次普通的加括弧形式的类型转换，在进入运行期时仍然会对其进行检查，以便保证它的确是我们希望的那种类型。如果不是，就会返回一个ClassCastException(类转型异常)。这种在运行期间对类型进行检查的行为称作“运行时类型识别”(RTTI)。下面的例子说明RTTI的行为：
 
-{% highlight java %}
+```java
 class Useful {
   public void f() {}
   public void g() {}
@@ -221,14 +221,14 @@ public class RTTI {
     ((MoreUseful)x[0]).u(); // Exception thrown
   }
 } ///:~
-{% endhighlight %}
+```
 
 ### 8.创建对象
 
 	所有的类都是在对其第一次使用时，动态加载到jvm中的。当程序创建第一个对类的静态成员的引用时，就会加载这个类。这个证明构造器也是静态方法,即使在构造器之前并没有使用static关键字。因为，通过new创建新对象时，也会被当做对类的静态成员的引用。
 	类加载器首先检查这个类的Class对象是否已经加载。如果尚未加载，默认的类加载器就会根据类名查找.class文件。一旦类的class对象被载入内存，它就用来创建这个类的所有对象。 
 
-{% highlight java %}
+```java
 class Candy {
   static { System.out.println("Loading Candy"); }
 }
@@ -264,7 +264,7 @@ After Class.forName("Gum")
 Loading Cookie
 After creating Cookie
 *///:~
-{% endhighlight %}
+```
 
 ### 9.Class.newInstance()
 
@@ -273,21 +273,21 @@ After creating Cookie
 
 ### 10.泛化的Class引用
 
-{% highlight java %}
+```java
 Class<Number> genericNumberClass = int.class;
-{% endhighlight %}
+```
 
 这看起来似乎是起作用的,因为Integer继承自Number.但它无法工作,因为Integer Class对象不是Number Class对象的子类.我们可以这样解决:
 
-{% highlight java %}
+```java
 Class<?> genericNumberClass = int.class;
 genericNumberClass = double.class;
 Class<? extends Number> genericNumberClass2 = int.class;
 genericNumberClass2 = double.class;
 genericNumberClass2 = Number.class;
-{% endhighlight %}
+```
 
-    在Java SE5中,Class<?>优于平凡的Class,即便它们是等价的，它表示你不是疏忽才这么做的。为了创建一个Class的引用,它被限定为某种类型,或该类型的任何子类型,你需要将通配符与extends关键字相结合,创建一个范围.
+  在Java SE5中,Class<?>优于平凡的Class,即便它们是等价的，它表示你不是疏忽才这么做的。为了创建一个Class的引用,它被限定为某种类型,或该类型的任何子类型,你需要将通配符与extends关键字相结合,创建一个范围.
 
 ### 11.instanceof与Class的等价性
 
@@ -307,7 +307,7 @@ genericNumberClass2 = Number.class;
 
 	Runnable是执行工作的独立任务，但是它不返回任何值。如果你希望任务在完成时能够返回一个值，那么可以实现Callable接口而不是Runnable接口。在java SE5中引入的Callable是一种具有类型参数的泛型，它的类型参数表示的是从方法call()中返回的值，并且必须使用ExecutorService.submit()方法调用它.
 
-{% highlight java %}
+```java
 import java.util.concurrent.*;
 import java.util.*;
 
@@ -353,7 +353,7 @@ result of TaskWithResult 7
 result of TaskWithResult 8
 result of TaskWithResult 9
 *///:~
-{% endhighlight %}
+```
 
 ### 15.休眠&优先级
 
@@ -365,7 +365,7 @@ result of TaskWithResult 9
 
 	后台（daemon）线程，是指在程序运行的时候在后台提供一种通用服务的线程，并且这种线程并不属于程序中不可或缺的部分。当所有的非后台线程结束时，程序也就终止了，同时会杀死进程中的所有后台线程。如果是一个后台线程，那么它创建的任何线程将被自动设置成后台线程。
 
-{% highlight java %}
+```java
 import java.util.concurrent.*;
 
 public class SimpleDaemons implements Runnable {
@@ -402,11 +402,11 @@ Thread[Thread-8,5,main] SimpleDaemons@1d58aae
 Thread[Thread-9,5,main] SimpleDaemons@83cc67
 ...
 *///:~
-{% endhighlight %}
+```
 
 后台进程在不执行finally子句的情况下就会终止其run()方法:
 
-{% highlight java %}
+```java
 import java.util.concurrent.*;
 
 class ADaemon implements Runnable {
@@ -431,11 +431,11 @@ public class DaemonsDontRunFinally {
 } /* Output:
 Starting ADaemon
 *///:~
-{% endhighlight %}
+```
 
 ### 17.异常捕获清理中断标志
 
-{% highlight java %}
+```java
 class Sleeper extends Thread {
   private int duration;
   public Sleeper(String name, int sleepTime) {
@@ -488,7 +488,7 @@ Doc join completed
 Sleepy has awakened
 Dopey join completed
 *///:~
-{% endhighlight %}
+```
 
 当另一个线程在该线程上调用interrupt()时将给该线程设定一个标志,表明该线程已经被中断.然而,异常被捕获时将清理这个标志,所以在catch子句中,在异常被捕获的时候这个标志总是为假.
 
@@ -496,7 +496,7 @@ Dopey join completed
 
 	Thread.UncaughtExceptionHandler是Java SE5中的新接口，它允许你在每个Thread对象上都附着一个异常处理器。Thread.UncaughtExceptionHandler.uncaughtException()会在线程因未捕获的异常而临近死亡时被调用。
 
-{% highlight java %}
+```java
 import java.util.concurrent.*;
 
 class ExceptionThread2 implements Runnable {
@@ -543,11 +543,11 @@ run() by Thread[Thread-0,5,main]
 eh = MyUncaughtExceptionHandler@1fb8ee3
 caught java.lang.RuntimeException
 *///:~
-{% endhighlight %}
+```
 
 如果你知道将要在代码中处处使用相同的异常处理器,那么更简单的方式是在Thread类中设置一个静态域,并将这个处理器设置为默认的未捕获异常处理器
 
-{% highlight java %}
+```java
 import java.util.concurrent.*;
 
 class TestThread implements Runnable{
@@ -565,7 +565,7 @@ public class SettingDefaultHandler {
 } /* Output:
 caught java.lang.RuntimeException
 *///:~
-{% endhighlight %}
+```
 
 ### 19.原子性与易变性
 
@@ -584,7 +584,7 @@ caught java.lang.RuntimeException
 
 创建和管理本地线程由java.lang.ThreadLocal类实现
 
-{% highlight java %}
+```java
 import java.util.concurrent.*;
 import java.util.*;
 
@@ -636,13 +636,13 @@ public class ThreadLocalVariableHolder {
 #4: 963
 ...
 *///:~
-{% endhighlight %}
+```
 
 	ThreadLocal对象通常当作静态域存储.在创建ThreadLocal时,你只能通过get()和set()方法来访问该对象的内容,其中,get()方法将返回与其线程相关联的对象的副本,而set()会将参数插入到为其线程存储的对象中,并返回存储中原有的对象.
 
 ### 22.中断
 
-{% highlight java %}
+```java
 import java.util.concurrent.*;
 import java.io.*;
 
@@ -725,13 +725,13 @@ Interrupting SynchronizedBlocked
 Interrupt sent to SynchronizedBlocked
 Aborting with System.exit(0)
 *///:~
-{% endhighlight %}
+```
 
 SleepBlock是可中断的阻塞示例,而IOBlocked和SynchronizedBlocked是不可中断的阻塞示例.
 
 ### 23.同一个互斥可以被同一个任务多次获得
 
-{% highlight java %}
+```java
 public class MultiLock {
   public synchronized void f1(int count) {
     if(count-- > 0) {
@@ -765,7 +765,7 @@ f2() calling f1() with count 2
 f1() calling f2() with count 1
 f2() calling f1() with count 0
 *///:~
-{% endhighlight %}
+```
 
     在main()中创建了一个调用f1()的Thread,然后f1()和f2()互相调用直至count变为0.由于这个任务已经在第一个对f1()的调用中获得了multiLock对象的锁,因此同一个任务将在对f2()的调用中再次获取这个锁,依此类推.这么做是有意义的,因为一个任务应该能够调用在同一个对象中的其他synchronized方法,而这个任务已经持有锁了.
 

@@ -19,7 +19,7 @@ tags : [aprogram,java]
 
 Spring为用户提供了一个叫作AbstractRoutingDataSource的类，看名字就可以知道是干嘛用的了，该类的部分内容如下：
 
-{% highlight java %}
+```java
 public abstract class AbstractRoutingDataSource extends AbstractDataSource implements InitializingBean {
 
     private Map<Object, Object> targetDataSources;
@@ -28,13 +28,13 @@ public abstract class AbstractRoutingDataSource extends AbstractDataSource imple
 	
 	protected abstract Object determineCurrentLookupKey();
 }
-{% endhighlight %}
+```
 
 简单使用的话，只需要关注上述3点就行了，其中targetDataSources是一个Map，Value是我们自己配置的数据源Bean，Key的话可以是枚举类，String或其他任意你喜欢的类型，defaultTargetDataSource是默认的数据源Bean，determineCurrentLookupKey则是需要我们自己实现的一个方法，该方法的作用就是判断当前正在使用的数据源Key，这个Key需要在上面的那个Map中存在，不然通过这个Key拿不到对应的数据源Bean，那就。。。
 
 下面是我对该类的一个继承
 
-{% highlight java %}
+```java
 public class DynamicDataSource extends AbstractRoutingDataSource {
 
     private static final ThreadLocal<DataSoureType> dataSourceKey = new ThreadLocal<>();
@@ -57,11 +57,11 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     }
 
 }
-{% endhighlight %}
+```
 
 以及DynamicDataSource的使用
 
-{% highlight java %}
+```java
     @Bean
     public DynamicDataSource dynamicDataSource() {
         DynamicDataSource dataSource = new DynamicDataSource();
@@ -72,7 +72,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         dataSource.setDefaultTargetDataSource(dataSourceCRMRead());
         return dataSource;
     }
-{% endhighlight %}
+```
 
 上述使用ThreadLocal来存储当前的数据源Key，确保线程安全，DataSoureType是自己定义的一个枚举类，在DynamicDataSource Bean的声明中，加入了2个数据源CRM_RES和ECS，其对应的数据源Bean通过dataSourceCRMRead和dataSourceECS方法获得，并设置dataSourceCRMRead为默认的数据源。
 
@@ -106,7 +106,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
 
 整个web应用只有一个页面，不同的操作，需要输入的内容不同，因此需要根据不同的操作动态的显式HTML内容，如何做到？这个还是比较简单的，可以通过js直接在DOM树中加元素，也可以直接在某个HTML标签里面通过InnerHTML插内容，但是这两种形式，写出来的HTML代码不直观，不易读，怎么办？可以通过angular.js来解决这个问题，但是有没有更加轻量的解决方法？在网上找到一个很绝妙的方法，做法是定义一个js函数，将HTML代码作为这个函数的注释，然后通过toString方法获得这段HTML代码
 
-{% highlight javascript %}
+```js
 function phone() {/*
  <div class="bs-example bs-example-form">
  <div class="input-group">
@@ -120,7 +120,7 @@ function phone() {/*
 function heredoc(fn) {
     return fn.toString().split('\n').slice(1, -1).join('\n') + '\n';
 }
-{% endhighlight %}
+```
 
 ### 5. event.preventDefault()
 	
@@ -134,22 +134,22 @@ function heredoc(fn) {
 
 CRM中有些逻辑库是分8个物理库的，每个物理库中又分8个物理表，因此需要根据不同的用户，通过CRM的分库分表规则来确定具体的库表信息，所以需要在Mybatis中动态指定库名和表名，其中参数是用于库表名的使用${param}，参数是用于where语句中的条件值的使用#{param}，另外当Mybatis的接口方法有多个入参时，需要明确的指定入参与SQL语句中参数的对应关系，例如下面这样：
 
-{% highlight java %}
+```java
 @Select("SELECT * FROM crm_${center}.ins_user_os_state_${regionId} WHERE USER_ID = #{userId}")
 Map<String, Object> getOSStateByUserId(@Param("center") String center, @Param("regionId") String regionId, @Param("userId") String userId);
-{% endhighlight %}
+```
 
 ### 8. 文件下载
 
 计费有个功能是造话单文件，这个造出来的话单文件有两种展现方式，一种是明文显示，一种是文件下载，那么需要做的是，Spring MVC方法中返回的是一个文件，这个简单，有很多种方式，简单点的可以直接返回一个FileSystemResource，但是有个问题，这个返回的FileSystemResource的文件名都是请求的URL，而不是真实的文件名，其实这个问题比较常见，有时我们在网上下载东西时，文件的网页显示名和打开这个链接让我们保存时的名字是不一样的，而有些网站则是一样的，那么怎么做到一样呢？其实很简单，只需要在响应头中指定Content-Disposition的值即可
 
-{% highlight java %}
+```java
 @RequestMapping(value = "getFile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 public FileSystemResource getFile(HttpServletResponse response, @RequestParam String path) {
     response.setHeader("Content-Disposition", "attachment; filename=\"" + path + "\"");
     return new FileSystemResource(path);
 }
-{% endhighlight %}
+```
 
 
 
