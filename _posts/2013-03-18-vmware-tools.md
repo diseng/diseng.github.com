@@ -2,7 +2,6 @@
 layout: post
 title : 修改vmware-tools以适应高版本Linux内核
 category : tool
-tags : [tool]
 ---
 {% include JB/setup %}
 

@@ -2,7 +2,6 @@
 layout: post
 title : 《一个人的村庄》读书摘录
 category : book
-tags : [book]
 ---
 {% include JB/setup %}
 

@@ -2,7 +2,6 @@
 layout: post
 title : 如何加入Fedora本地化项目
 category : linux
-tags : [linux]
 ---
 {% include JB/setup %}
 

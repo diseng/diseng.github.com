@@ -2,7 +2,6 @@
 layout: post
 title : Linux下Eclipse的界面调整
 category : linux
-tags : [linux,eclipse]
 ---
 {% include JB/setup %}
 

@@ -2,7 +2,6 @@
 layout: post
 title : 关于人人公共主页FedoraProject
 category : linux
-tags : [linux]
 ---
 {% include JB/setup %}
 

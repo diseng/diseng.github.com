@@ -2,7 +2,6 @@
 layout: post
 title : LinuxMint14启动软盘挂载报错解决方法
 category : linux
-tags : [linux]
 ---
 {% include JB/setup %}
 

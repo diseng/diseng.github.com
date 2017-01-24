@@ -2,7 +2,6 @@
 layout: post
 title : Java Annotation入门及Spock Anntation编写 
 category : program
-tags : [program,java]
 ---
 {% include JB/setup %}
 

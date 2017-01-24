@@ -2,7 +2,6 @@
 layout: post
 title : 《高效能人士的7个习惯》读书摘录
 category : book
-tags : [book]
 ---
 {% include JB/setup %}
 

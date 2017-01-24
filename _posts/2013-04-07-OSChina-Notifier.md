@@ -2,7 +2,6 @@
 layout: post
 title : Chrome扩展程序OSChina-Notifier
 category : program
-tags : [program,js]
 ---
 {% include JB/setup %}
 

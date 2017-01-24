@@ -2,7 +2,6 @@
 layout: post
 title : 《30天自制操作系统》读书摘录
 category : book
-tags : [book]
 ---
 {% include JB/setup %}
 

@@ -2,7 +2,6 @@
 layout: post
 title : 历史上最有影响力的100人 
 category : translate
-tags : [translate]
 ---
 {% include JB/setup %}
 

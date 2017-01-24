@@ -2,7 +2,6 @@
 layout: post
 title : Spring Transactional 测试
 category : program
-tags : [program,java]
 ---
 {% include JB/setup %}
 

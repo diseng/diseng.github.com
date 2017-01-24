@@ -2,7 +2,6 @@
 layout: post
 title : Linux VPS 配置脚本
 category : linux
-tags : [linux]
 ---
 {% include JB/setup %}
 

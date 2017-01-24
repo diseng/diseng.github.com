@@ -2,7 +2,6 @@
 layout: post
 title : 谈谈云计算
 category : something
-tags : [something]
 ---
 {% include JB/setup %}
 

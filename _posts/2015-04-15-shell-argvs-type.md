@@ -2,7 +2,6 @@
 layout: post
 title : shell脚本的几种传参方式
 category : program
-tags : [program]
 ---
 {% include JB/setup %}
 

@@ -2,7 +2,6 @@
 layout: post
 title : 《Thinking in Java》再读笔记
 category : book
-tags : [book]
 ---
 {% include JB/setup %}
 

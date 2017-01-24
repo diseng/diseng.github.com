@@ -2,7 +2,6 @@
 layout: post
 title : 图片故事
 category : translate
-tags : [translate]
 ---
 {% include JB/setup %}
 

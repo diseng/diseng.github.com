@@ -2,7 +2,6 @@
 layout: post
 title : Bloom Filter简析
 category : algorithm
-tags : [algorithm]
 ---
 {% include JB/setup %}
 

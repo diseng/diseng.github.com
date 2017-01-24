@@ -2,7 +2,6 @@
 layout: post
 title : 使用Groovy时有哪些必要工具吗
 category : program
-tags : [program,groovy]
 ---
 {% include JB/setup %}
 

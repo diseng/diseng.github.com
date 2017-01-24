@@ -2,7 +2,6 @@
 layout: post
 title : 《看见》读书摘录
 category : book
-tags : [book]
 ---
 {% include JB/setup %}
 

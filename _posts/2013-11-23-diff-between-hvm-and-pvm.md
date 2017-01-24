@@ -2,7 +2,6 @@
 layout: post
 title : Xen虚拟化技术中PV和HVM的区别
 category : translate
-tags : [translate]
 ---
 {% include JB/setup %}
 

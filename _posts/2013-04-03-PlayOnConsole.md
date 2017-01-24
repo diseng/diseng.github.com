@@ -2,7 +2,6 @@
 layout: post
 title : 新浪微博应用PlayOnConsole
 category : program
-tags : [program]
 ---
 {% include JB/setup %}
 

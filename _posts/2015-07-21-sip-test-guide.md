@@ -2,7 +2,6 @@
 layout: post
 title : SIP测试入门指南
 category : program
-tags : [sip]
 ---
 {% include JB/setup %}
 

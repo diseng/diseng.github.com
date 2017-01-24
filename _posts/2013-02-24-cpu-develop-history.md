@@ -2,7 +2,6 @@
 layout: post
 title : CPU发展史
 category : hardware
-tags : [hardware,cpu]
 ---
 {% include JB/setup %}
 

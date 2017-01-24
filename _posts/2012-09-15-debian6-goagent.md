@@ -2,7 +2,6 @@
 layout: post
 title : debian6配置GoAgent
 category : linux
-tags : [linux]
 ---
 {% include JB/setup %}
 

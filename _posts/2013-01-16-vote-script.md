@@ -2,7 +2,6 @@
 layout: post
 title : 投票脚本
 category : program
-tags : [program,php]
 ---
 {% include JB/setup %}
 

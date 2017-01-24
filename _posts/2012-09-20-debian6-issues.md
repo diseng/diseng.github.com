@@ -2,7 +2,6 @@
 layout: post
 title : debian6日常问题解决方法
 category : linux
-tags : [linux]
 ---
 {% include JB/setup %}
 

@@ -2,7 +2,6 @@
 layout: post
 title : 【转】海量用户积分排名算法探讨
 category : algorithm
-tags : [algorithm]
 ---
 {% include JB/setup %}
 

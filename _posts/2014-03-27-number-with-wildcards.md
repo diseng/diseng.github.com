@@ -2,7 +2,6 @@
 layout: post
 title : 带通配符的数
 category : algorithm
-tags : [algorithm]
 ---
 {% include JB/setup %}
 

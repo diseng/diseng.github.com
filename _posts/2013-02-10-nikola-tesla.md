@@ -2,7 +2,6 @@
 layout: post
 title : 【转】为什么尼古拉·特斯拉是迄今为止最伟大的极客
 category : people
-tags : [people]
 ---
 {% include JB/setup %}
 

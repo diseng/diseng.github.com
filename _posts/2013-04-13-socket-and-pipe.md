@@ -2,7 +2,6 @@
 layout: post
 title : 套接字和管道示例
 category : program
-tags : [program,c]
 ---
 {% include JB/setup %}
 

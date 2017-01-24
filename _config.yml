@@ -22,8 +22,6 @@ title : diseng's blog
 author :
   name : diseng
   email : diseng1991@gmail.com
-  github : diseng
-  weibo : 1230478737
 
 # The production_url is only used when full-domain names are needed
 # such as sitemap.txt 
@@ -79,7 +77,6 @@ JB :
   #
   archive_path: /archive.html
   categories_path : /categories.html
-  tags_path : /tags.html
 
   # Settings for comments helper
   # Set 'provider' to the comment provider you want to use.

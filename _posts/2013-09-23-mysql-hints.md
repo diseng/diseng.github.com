@@ -2,7 +2,6 @@
 layout: post
 title : MySQL优化之hints
 category : database
-tags : [database,mysql]
 ---
 {% include JB/setup %}
 

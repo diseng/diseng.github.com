@@ -2,7 +2,6 @@
 layout: post
 title : 部分算法题解题思路
 category : algorithm
-tags : [algorithm]
 ---
 {% include JB/setup %}
 

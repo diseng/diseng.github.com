@@ -2,7 +2,6 @@
 layout: post
 title : debian6安装笔记
 category : linux
-tags : [linux]
 ---
 {% include JB/setup %}
 

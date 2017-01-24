@@ -2,7 +2,6 @@
 layout: post
 title : 中国各地电话区号编码规则
 category : something
-tags : [something]
 ---
 {% include JB/setup %}
 

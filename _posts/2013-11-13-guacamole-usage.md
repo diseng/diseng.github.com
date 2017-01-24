@@ -2,7 +2,6 @@
 layout: post
 title : 通过Guacamole远程web控制你的电脑
 category : program
-tags : [program,guacamole]
 ---
 {% include JB/setup %}
 

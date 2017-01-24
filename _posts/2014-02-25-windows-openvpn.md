@@ -2,7 +2,6 @@
 layout: post
 title : windows下使用openvpn
 category : tool
-tags : [tool,windows]
 ---
 {% include JB/setup %}
 
