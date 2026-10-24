@@ -3,153 +3,496 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kindle 兼容性测试 v2</title>
+<title>每日任务打卡</title>
 <style>
+  /* Kindle PW3 墨水屏优化：纯黑白、高对比、大字体、无动画、无Flexbox */
   * { margin: 0; padding: 0; }
   body {
     font-family: serif;
     background: #fff;
     color: #000;
-    padding: 20px;
-    max-width: 700px;
-    margin: 0 auto;
+    padding: 8px;
   }
-  h1 { font-size: 24px; margin-bottom: 16px; border-bottom: 3px solid #000; padding-bottom: 8px; }
-  .box {
+  .header {
+    border-bottom: 4px solid #000;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .header .title { font-size: 30px; font-weight: bold; float: left; }
+  .header .clock { font-size: 24px; float: right; padding-top: 6px; }
+  .tabs { margin-bottom: 12px; overflow: hidden; }
+  .tab {
+    display: block;
+    float: left;
+    width: 48%;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    padding: 10px 0;
     border: 3px solid #000;
-    padding: 20px;
-    margin-bottom: 16px;
+    background: #fff;
+    color: #000;
+    cursor: pointer;
   }
-  .label { font-size: 18px; font-weight: bold; margin-bottom: 8px; }
-  .value { font-size: 40px; font-weight: bold; text-align: center; padding: 10px 0; }
-  .ok   { background: #000; color: #fff; padding: 4px 10px; font-size: 20px; }
-  .bad  { border: 3px solid #000; padding: 4px 10px; font-size: 20px; }
-  button {
-    width: 100%;
-    min-height: 70px;
+  .tab.active { background: #000; color: #fff; }
+  .tab.right { float: right; }
+  .group-title {
+    font-size: 22px;
+    font-weight: bold;
+    border-bottom: 2px solid #000;
+    margin: 10px 0 6px 0;
+    padding-bottom: 2px;
+  }
+  .tiles { overflow: hidden; }
+  .task {
+    display: block;
+    float: left;
+    width: 49%;
+    height: 130px;
     font-size: 28px;
     font-weight: bold;
+    text-align: center;
+    padding-top: 46px;
+    margin-bottom: 8px;
     background: #fff;
     color: #000;
     border: 4px solid #000;
-    margin-bottom: 12px;
     cursor: pointer;
+    font-family: serif;
+    overflow: hidden;
   }
-  button:active { background: #000; color: #fff; }
-  .step { font-size: 18px; line-height: 1.6; margin-bottom: 6px; }
-  .small { font-size: 14px; color: #333; margin-top: 12px; }
+  .task.tr { float: right; }
+  .task .mark { font-size: 32px; }
+  .task.done {
+    background: #000;
+    color: #fff;
+  }
+  .progress {
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border: 3px solid #000;
+    margin-bottom: 10px;
+  }
+  .progress .big { font-size: 40px; }
+  .hrow {
+    border: 2px solid #000;
+    padding: 10px;
+    margin-bottom: 6px;
+    font-size: 26px;
+    font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .hrow .d { display: inline-block; width: 22%; }
+  .hrow .bar {
+    display: inline-block;
+    width: 34%;
+    height: 24px;
+    border: 2px solid #000;
+    vertical-align: middle;
+    margin: 0 3%;
+  }
+  .hrow .bar i {
+    display: block;
+    height: 100%;
+    background: #000;
+  }
+  .hrow .s { display: inline-block; width: 16%; text-align: center; }
+  .hrow .c { display: inline-block; width: 16%; text-align: right; }
+  .empty { font-size: 22px; text-align: center; padding: 30px 0; }
+  .quote {
+    border: 4px solid #000;
+    height: 92px;
+    margin-top: 6px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    padding-top: 26px;
+    line-height: 1.4;
+  }
+  .note { font-size: 16px; color: #333; margin-top: 10px; text-align: center; }
 </style>
 </head>
 <body>
 
-<h1>Kindle 兼容性测试 v2</h1>
-
-<div class="box">
-  <div class="label">A. localStorage 计数器</div>
-  <div id="lsCounter" class="value">-</div>
+<div class="header">
+  <span class="title">每日任务打卡</span>
+  <span class="clock" id="clock">--</span>
 </div>
 
-<div class="box">
-  <div class="label">B. WebSQL 计数器（重点测试项）</div>
-  <div id="sqlSupport" class="label">检测中…</div>
-  <div id="sqlCounter" class="value">-</div>
+<div class="tabs">
+  <a class="tab active" id="tabToday" onclick="showTab('today')">今日打卡</a>
+  <a class="tab right" id="tabHistory" onclick="showTab('history')">历史记录</a>
 </div>
 
-<div class="box">
-  <div class="label">C. Cookie 计数器</div>
-  <div id="cookieCounter" class="value">-</div>
-</div>
-
-<button onclick="addAll()">三个一起 +1</button>
-
-<div class="box">
-  <div class="label">测试步骤</div>
-  <div class="step">① 点几次「三个一起 +1」</div>
-  <div class="step">② <b>完全退出浏览器</b>（回到 Kindle 主页，按 Home 键）</div>
-  <div class="step">③ 重新打开浏览器，输入网址回来</div>
-  <div class="step">④ 哪个数字没归零，哪个就是可用的持久化方案</div>
-  <div class="small" id="ua"></div>
-</div>
+<div class="progress" id="progress" style="display:none;"></div>
+<div id="main"></div>
+<div class="note">每天早上 7:00 自动存档并重置</div>
 
 <script>
-// ===== A. localStorage =====
-function lsGet() {
-  try { return parseInt(window.localStorage.getItem('kt_ls') || '0', 10); } catch (e) { return -1; }
-}
-function lsSet(v) {
-  try { window.localStorage.setItem('kt_ls', String(v)); } catch (e) {}
-}
+/* ================= 配置 ================= */
+var RESET_HOUR = 7;           // 每天重置时间：早上7点
+var KEEP_DAYS  = 90;          // 历史保留天数
+var GROUPS = [
+  { name: '每日必做', tasks: ['户外活动', '学校作业+书包整理'] },
+  { name: '身体健康', tasks: ['早晚反转拍练习', '靠墙拉筋板10分钟', '扶墙垫脚3组每组30次', '单杠2次', '眼药水', '擦香'] },
+  { name: '日常习惯', tasks: ['阅读', '英语听力'] }
+];
 
-// ===== B. WebSQL =====
-var db = null;
-var sqlSupported = false;
-try {
-  if (window.openDatabase) {
-    db = window.openDatabase('ktdb', '1.0', 'kt test', 1024 * 1024);
-    sqlSupported = !!db;
+/* 展平成10个任务 */
+var TASKS = [];
+(function () {
+  for (var g = 0; g < GROUPS.length; g++) {
+    for (var i = 0; i < GROUPS[g].tasks.length; i++) {
+      TASKS.push(GROUPS[g].tasks[i]);
+    }
   }
-} catch (e) { sqlSupported = false; }
+})();
+var TASK_COUNT = TASKS.length;
 
-function sqlGet(cb) {
-  if (!db) { cb(-1); return; }
-  try {
-    db.transaction(function (tx) {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS kv (k TEXT, v INTEGER)');
-      tx.executeSql('SELECT v FROM kv WHERE k="c"', [], function (t, rs) {
-        cb(rs.rows.length ? rs.rows.item(0).v : 0);
-      }, function () { cb(-2); });
-    });
-  } catch (e) { cb(-3); }
-}
-function sqlSet(v) {
-  if (!db) return;
-  try {
-    db.transaction(function (tx) {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS kv (k TEXT, v INTEGER)');
-      tx.executeSql('DELETE FROM kv WHERE k="c"');
-      tx.executeSql('INSERT INTO kv (k, v) VALUES ("c", ?)', [v]);
-    });
-  } catch (e) {}
+/* 每项分值（与 TASKS 顺序一一对应），每日必做2项记0分但作为记分门槛，满分10分 */
+var SCORES = [0, 0, 1, 1, 1, 1, 1, 1, 2, 2];
+var MAX_SCORE = 10;
+
+/* 每日一句（搞笑版），按日期轮换 */
+var QUOTES = [
+  '今天的任务小怪兽，全部打败！',
+  '打卡成功，能量+100！',
+  '书包整理好，明天没烦恼！',
+  '拉伸一下，长高开挂！',
+  '你的眼睛说：谢谢你滴眼药水！',
+  '单杠一拉，臂力顶呱呱！',
+  '阅读时间到，脑袋要吃饱！',
+  '英语听力磨耳朵，磨出金耳朵！',
+  '垫脚30下，个子往上爬！',
+  '反转拍一转，眼睛亮闪闪！',
+  '擦香香，脸蛋滑溜溜！',
+  '户外跑一跑，快乐少不了！',
+  '作业写完啦，自由玩耍啦！',
+  '今日任务：把懒惰大魔王打败！',
+  '打卡小达人，非你莫属！',
+  '坚持打卡，蚊子都夸你！',
+  '任务全完成，零食在招手？（问爸妈）',
+  '你是今天的任务收割机！',
+  '拉筋拉一拉，大长腿来啦！',
+  '完成打卡，奖励自己一个大哈欠',
+  '今天的你，比奥特曼还努力！',
+  '书包不整理，明天变垃圾堆',
+  '眼睛休息好，世界变高清！',
+  '打卡不偷懒，分数往上窜！',
+  '小任务，大英雄！',
+  '每天一打卡，快乐笑哈哈！',
+  '反转拍转转转，近视远远地站！',
+  '英语天天听，老外听了都吃惊！',
+  '阅读十分钟，脑洞大无穷！',
+  '垫脚垫得勤，离篮筐更近一毫米！',
+  '单杠挂一挂，变身小哪吒！',
+  '眼药水一滴，给眼睛洗个澡！',
+  '擦香不偷懒，小脸嫩嫩弹！',
+  '户外晒太阳，个子蹭蹭长！',
+  '作业早早写，玩耍更痛快！',
+  '今日事今日毕，明天绝不拖！',
+  '打卡全对勾，爸妈乐悠悠！',
+  '你打卡的样子，真帅！',
+  '打卡如打怪，经验天天涨！',
+  '任务打勾勾，快乐没有头！',
+  '警告：完成任务会让你变更强！',
+  '懒虫退散，打卡出击！',
+  '拉筋板上一站，大长腿不远了！',
+  '反转拍练得好，黑板看得清！',
+  '英语多听几遍，越听越入味！',
+  '书里藏着宝藏，等你去挖！',
+  '今天垫脚了吗？离天更近啦！',
+  '单杠拉两次，胳膊粗两圈（想象中）',
+  '滴眼药水，眼睛亮得像灯泡！',
+  '擦香擦香，越擦越香！',
+  '出去野一野，户外时间到！',
+  '书包收拾好，上学像战士出征！',
+  '作业别拖到月亮出来！',
+  '打卡小能手，就是你了！',
+  '把任务KO，你就是拳王！',
+  '今日目标：比昨天多坚持一秒！',
+  '打卡如喝水，每天来一杯！',
+  '小坚持，大变身！',
+  '眼睛发来感谢信：谢谢护眼！',
+  '腿说：谢谢你拉筋，我要长高！',
+  '耳朵说：今天的英语真好吃！',
+  '大脑说：阅读真香，再来一章！',
+  '脸说：擦完香我滑溜溜！',
+  '胳膊说：单杠真带劲！',
+  '全身说：今天也是努力的一天！',
+  '打卡不缺席，积分攒起来！',
+  '你是家里的小劳模！',
+  '今日份努力已到账！',
+  '任务清空，快乐满格！',
+  '全对勾的一天，完美！',
+  '坚持打卡的小孩，运气不会差！',
+  '打卡和刷牙一样，天天都要！',
+  '今日能量已充满！',
+  '你认真打卡，蚊子都不好意思叮你！',
+  '打勾一时爽，天天打勾天天爽！',
+  '任务十个？小意思！',
+  '今天你打卡了吗？打了！漂亮！',
+  '懒人模式关闭，超人模式开启！',
+  '今日已打卡，请继续可爱！',
+  '打卡完成，去撒欢吧！',
+  '你是打卡界的小天才！',
+  '坚持一下，惊喜在后头！',
+  '每一天都在偷偷变优秀！',
+  '别停，优秀正在路上！',
+  '小小打卡，藏着大大的未来！',
+  '今日打卡，明日开挂！',
+  '全勤小标兵，就是你！',
+  '打卡结束，今天的你真了不起！'
+];
+
+/* 计算得分：每日必做2项未完成则0分 */
+function scoreOf(fl) {
+  if (fl.charAt(0) !== '1' || fl.charAt(1) !== '1') return 0;
+  var s = 0;
+  for (var i = 0; i < TASK_COUNT; i++) {
+    if (fl.charAt(i) === '1') s += SCORES[i];
+  }
+  return s;
 }
 
-// ===== C. Cookie =====
-function cookieGet() {
-  try {
-    var m = document.cookie.match(/kt_ck=(\d+)/);
-    return m ? parseInt(m[1], 10) : 0;
-  } catch (e) { return -1; }
+/* ================= Cookie 工具 ================= */
+function setCookie(k, v) {
+  document.cookie = k + '=' + encodeURIComponent(v) +
+    '; expires=Tue, 19 Jan 2038 03:14:07 GMT; path=/';
 }
-function cookieSet(v) {
-  try {
-    document.cookie = 'kt_ck=' + v + '; expires=Tue, 19 Jan 2038 03:14:07 GMT; path=/';
-  } catch (e) {}
+function getCookie(k) {
+  var pairs = document.cookie.split('; ');
+  for (var i = 0; i < pairs.length; i++) {
+    var eq = pairs[i].indexOf('=');
+    if (eq > 0 && pairs[i].substring(0, eq) === k) {
+      return decodeURIComponent(pairs[i].substring(eq + 1));
+    }
+  }
+  return null;
+}
+function delCookie(k) {
+  document.cookie = k + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+}
+function allHistoryCookies() {
+  var out = [];
+  var pairs = document.cookie.split('; ');
+  for (var i = 0; i < pairs.length; i++) {
+    var eq = pairs[i].indexOf('=');
+    if (eq > 0) {
+      var k = pairs[i].substring(0, eq);
+      if (k.indexOf('dt_h_') === 0) {
+        out.push({ key: k, val: decodeURIComponent(pairs[i].substring(eq + 1)) });
+      }
+    }
+  }
+  return out;
 }
 
-// ===== 渲染 =====
-function show(id, text) { document.getElementById(id).innerHTML = text; }
+/* 日期工具 */
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+/* 强制按中国时区（UTC+8）取时间，避免设备时区设置不对导致显示错误 */
+function nowCN() {
+  var n = new Date();
+  return new Date(n.getTime() + (n.getTimezoneOffset() + 480) * 60000);
+}
+function ymd(d) {
+  return '' + d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate());
+}
+/* "任务日"：凌晨0点到7点之间仍算前一天 */
+function taskDay(now) {
+  var d = new Date(now.getTime());
+  if (d.getHours() < RESET_HOUR) {
+    d.setDate(d.getDate() - 1);
+  }
+  return ymd(d);
+}
+function intYmd(s) { return parseInt(s, 10); }
 
-function render() {
-  show('lsCounter', lsGet());
-  show('cookieCounter', cookieGet());
-  show('sqlSupport', sqlSupported
-    ? '<span class="ok">✔ 浏览器支持 WebSQL</span>'
-    : '<span class="bad">✘ 不支持 WebSQL</span>');
-  sqlGet(function (v) { show('sqlCounter', v < 0 ? '出错' : v); });
+/* ================= 状态 ================= */
+var flags = '';               // 10位 0/1
+var currentTab = 'today';
+
+function zeroFlags() {
+  var s = '';
+  for (var i = 0; i < TASK_COUNT; i++) s += '0';
+  return s;
 }
 
-function addAll() {
-  lsSet(lsGet() + 1);
-  cookieSet(cookieGet() + 1);
-  sqlGet(function (v) {
-    sqlSet((v < 0 ? 0 : v) + 1);
-    // 延迟渲染，等 WebSQL 写完
-    setTimeout(render, 300);
-  });
+/* 归档某一天：把 yyyymmdd 的 flags 写入对应月份 Cookie */
+function archive(dateStr, fl) {
+  var monthKey = 'dt_h_' + dateStr.substring(2, 6);   // dt_h_2610
+  var day = dateStr.substring(6, 8);                   // 24
+  var val = getCookie(monthKey);
+  var entries = {};
+  if (val) {
+    var parts = val.split(',');
+    for (var i = 0; i < parts.length; i++) {
+      var kv = parts[i].split(':');
+      if (kv.length === 2) entries[kv[0]] = kv[1];
+    }
+  }
+  entries[day] = fl;
+  var out = [];
+  for (var k in entries) { out.push(k + ':' + entries[k]); }
+  setCookie(monthKey, out.join(','));
+  prune();
+}
+
+/* 清理 KEEP_DAYS 之前的历史 */
+function prune() {
+  var cutoff = nowCN();
+  cutoff.setDate(cutoff.getDate() - KEEP_DAYS);
+  var cutoffInt = intYmd(ymd(cutoff));
+  var list = allHistoryCookies();
+  for (var i = 0; i < list.length; i++) {
+    var ym = '20' + list[i].key.substring(5);          // dt_h_2610 -> 202610
+    var parts = list[i].val.split(',');
+    var kept = [];
+    for (var j = 0; j < parts.length; j++) {
+      var kv = parts[j].split(':');
+      if (kv.length === 2 && intYmd(ym + kv[0]) >= cutoffInt) {
+        kept.push(parts[j]);
+      }
+    }
+    if (kept.length) {
+      setCookie(list[i].key, kept.join(','));
+    } else {
+      delCookie(list[i].key);
+    }
+  }
+}
+
+/* 检查是否跨过了任务日：跨了就归档旧状态并重置 */
+function tick() {
+  var today = taskDay(nowCN());
+  var stored = getCookie('dt_today');                  // "yyyymmdd:flags"
+  if (!stored || stored.split(':')[0] !== today) {
+    if (stored) {
+      var kv = stored.split(':');
+      if (kv[1] !== zeroFlags()) archive(kv[0], kv[1]); // 全0的空记录不存档
+    }
+    flags = zeroFlags();
+    setCookie('dt_today', today + ':' + flags);
+    render();   // 重置后立即刷新界面
+  } else {
+    flags = stored.split(':')[1];
+    if (flags.length !== TASK_COUNT) flags = zeroFlags();
+  }
+  updateClock();
+}
+
+function save() {
+  setCookie('dt_today', taskDay(nowCN()) + ':' + flags);
+}
+
+/* ================= 交互 ================= */
+function toggle(i) {
+  flags = flags.substring(0, i) + (flags.charAt(i) === '1' ? '0' : '1') + flags.substring(i + 1);
+  save();
+  render();
+}
+function showTab(t) {
+  currentTab = t;
+  document.getElementById('tabToday').className = 'tab' + (t === 'today' ? ' active' : '');
+  document.getElementById('tabHistory').className = 'tab right' + (t === 'history' ? ' active' : '');
   render();
 }
 
+/* ================= 渲染 ================= */
+function updateClock() {
+  var n = nowCN();
+  var week = ['日', '一', '二', '三', '四', '五', '六'][n.getDay()];
+  document.getElementById('clock').innerHTML =
+    pad(n.getMonth() + 1) + '-' + pad(n.getDate()) + ' 周' + week;
+}
+
+function render() {
+  var html = '';
+  var progress = document.getElementById('progress');
+  if (currentTab === 'today') {
+    var done = 0, i;
+    for (i = 0; i < TASK_COUNT; i++) if (flags.charAt(i) === '1') done++;
+    var score = scoreOf(flags);
+    var gated = flags.charAt(0) === '1' && flags.charAt(1) === '1';
+    progress.style.display = 'block';
+    progress.innerHTML = '今日得分 <span class="big">' + score + '</span>，' +
+      '已完成任务 <span class="big">' + done + '/' + TASK_COUNT + '</span>' +
+      (!gated ? '<div style="font-size:20px;margin-top:6px;">⚠ 「每日必做」未完成，暂不计分</div>' : '') +
+      (done === TASK_COUNT ? '<div style="font-size:28px;margin-top:6px;">★ 全部完成，真棒！ ★</div>' : '');
+    var idx = 0;
+    for (var g = 0; g < GROUPS.length; g++) {
+      html += '<div class="group-title">【' + GROUPS[g].name + '】</div><div class="tiles">';
+      for (var t = 0; t < GROUPS[g].tasks.length; t++) {
+        (function (index, name, pos) {
+          var isDone = flags.charAt(index) === '1';
+          html += '<button class="task' + (pos % 2 ? ' tr' : '') + (isDone ? ' done' : '') +
+            '" onclick="toggle(' + index + ')">' +
+            '<span class="mark">' + (isDone ? '✔ ' : '○ ') + '</span>' + name + '</button>';
+        })(idx, GROUPS[g].tasks[t], t);
+        idx++;
+      }
+      html += '</div>';
+    }
+    /* 底部鼓励语：按日期轮换 */
+    var dayInt = parseInt(taskDay(nowCN()), 10);
+    html += '<div class="quote">' + QUOTES[dayInt % QUOTES.length] + '</div>';
+  } else {
+    progress.style.display = 'none';
+    html = renderHistory();
+  }
+  document.getElementById('main').innerHTML = html;
+}
+
+function renderHistory() {
+  var days = {};   // yyyymmdd -> flags
+  var list = allHistoryCookies();
+  var i, j;
+  for (i = 0; i < list.length; i++) {
+    var ym = '20' + list[i].key.substring(5);
+    var parts = list[i].val.split(',');
+    for (j = 0; j < parts.length; j++) {
+      var kv = parts[j].split(':');
+      if (kv.length === 2) days[ym + kv[0]] = kv[1];
+    }
+  }
+  /* 把今天还没归档的也加进去显示 */
+  var stored = getCookie('dt_today');
+  if (stored) {
+    var kv2 = stored.split(':');
+    if (kv2.length === 2 && kv2[1] !== zeroFlags()) days[kv2[0]] = kv2[1];
+  }
+  var keys = [];
+  for (var k in days) keys.push(k);
+  if (!keys.length) {
+    return '<div class="empty">还没有历史记录</div>';
+  }
+  keys.sort();
+  keys.reverse();
+  var html = '';
+  for (i = 0; i < keys.length; i++) {
+    var fl = days[keys[i]];
+    var cnt = 0;
+    for (j = 0; j < fl.length; j++) if (fl.charAt(j) === '1') cnt++;
+    var pct = Math.round(cnt * 100 / TASK_COUNT);
+    html += '<div class="hrow">' +
+      '<span class="d">' + keys[i].substring(4, 6) + '-' + keys[i].substring(6, 8) + '</span>' +
+      '<span class="bar"><i style="width:' + pct + '%;"></i></span>' +
+      '<span class="s">' + scoreOf(fl) + '分</span>' +
+      '<span class="c">' + cnt + '/' + TASK_COUNT + '</span>' +
+      '</div>';
+  }
+  return html;
+}
+
+/* ================= 启动 ================= */
+tick();
 render();
-show('ua', navigator.userAgent);
+/* 每小时检查一次是否跨过早上7点（跨了就归档并重置） */
+setInterval(tick, 3600000);
 </script>
 
 </body>
