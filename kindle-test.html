@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kindle 兼容性测试</title>
+<title>Kindle 兼容性测试 v2</title>
 <style>
-  /* 墨水屏优化：纯黑白、高对比、大字体、无动画 */
   * { margin: 0; padding: 0; }
   body {
     font-family: serif;
@@ -22,7 +21,7 @@
     margin-bottom: 16px;
   }
   .label { font-size: 18px; font-weight: bold; margin-bottom: 8px; }
-  .value { font-size: 48px; font-weight: bold; text-align: center; padding: 16px 0; }
+  .value { font-size: 40px; font-weight: bold; text-align: center; padding: 10px 0; }
   .ok   { background: #000; color: #fff; padding: 4px 10px; font-size: 20px; }
   .bad  { border: 3px solid #000; padding: 4px 10px; font-size: 20px; }
   button {
@@ -43,91 +42,112 @@
 </head>
 <body>
 
-<h1>Kindle 兼容性测试</h1>
+<h1>Kindle 兼容性测试 v2</h1>
 
 <div class="box">
-  <div class="label">1. localStorage 是否支持</div>
-  <div id="supportStatus" class="value">检测中…</div>
+  <div class="label">A. localStorage 计数器</div>
+  <div id="lsCounter" class="value">-</div>
 </div>
 
 <div class="box">
-  <div class="label">2. 计数器（刷新页面后数字应保持不变）</div>
-  <div id="counter" class="value">0</div>
-  <button onclick="add()">点我 +1</button>
-  <button onclick="resetCounter()">清零</button>
+  <div class="label">B. WebSQL 计数器（重点测试项）</div>
+  <div id="sqlSupport" class="label">检测中…</div>
+  <div id="sqlCounter" class="value">-</div>
 </div>
 
 <div class="box">
-  <div class="label">3. 上次写入时间（用于确认数据真的被保存了）</div>
-  <div id="lastSaved" class="value" style="font-size:24px;">无记录</div>
+  <div class="label">C. Cookie 计数器</div>
+  <div id="cookieCounter" class="value">-</div>
 </div>
+
+<button onclick="addAll()">三个一起 +1</button>
 
 <div class="box">
   <div class="label">测试步骤</div>
-  <div class="step">① 点几次「点我 +1」</div>
-  <div class="step">② 按 Kindle 浏览器的刷新（或关闭页面重新输入网址打开）</div>
-  <div class="step">③ 数字没归零 → ✅ 通过</div>
-  <div class="step">④ 再彻底退出浏览器重开一次，数字还在 → 持久化 OK</div>
+  <div class="step">① 点几次「三个一起 +1」</div>
+  <div class="step">② <b>完全退出浏览器</b>（回到 Kindle 主页，按 Home 键）</div>
+  <div class="step">③ 重新打开浏览器，输入网址回来</div>
+  <div class="step">④ 哪个数字没归零，哪个就是可用的持久化方案</div>
   <div class="small" id="ua"></div>
 </div>
 
 <script>
-// 全部使用 ES5 语法，兼容老 WebKit
-var KEY_COUNT = 'kt_count';
-var KEY_TIME  = 'kt_time';
+// ===== A. localStorage =====
+function lsGet() {
+  try { return parseInt(window.localStorage.getItem('kt_ls') || '0', 10); } catch (e) { return -1; }
+}
+function lsSet(v) {
+  try { window.localStorage.setItem('kt_ls', String(v)); } catch (e) {}
+}
 
-function storageOK() {
-  try {
-    var k = '__kt_test__';
-    window.localStorage.setItem(k, '1');
-    window.localStorage.removeItem(k);
-    return true;
-  } catch (e) {
-    return false;
+// ===== B. WebSQL =====
+var db = null;
+var sqlSupported = false;
+try {
+  if (window.openDatabase) {
+    db = window.openDatabase('ktdb', '1.0', 'kt test', 1024 * 1024);
+    sqlSupported = !!db;
   }
+} catch (e) { sqlSupported = false; }
+
+function sqlGet(cb) {
+  if (!db) { cb(-1); return; }
+  try {
+    db.transaction(function (tx) {
+      tx.executeSql('CREATE TABLE IF NOT EXISTS kv (k TEXT, v INTEGER)');
+      tx.executeSql('SELECT v FROM kv WHERE k="c"', [], function (t, rs) {
+        cb(rs.rows.length ? rs.rows.item(0).v : 0);
+      }, function () { cb(-2); });
+    });
+  } catch (e) { cb(-3); }
+}
+function sqlSet(v) {
+  if (!db) return;
+  try {
+    db.transaction(function (tx) {
+      tx.executeSql('CREATE TABLE IF NOT EXISTS kv (k TEXT, v INTEGER)');
+      tx.executeSql('DELETE FROM kv WHERE k="c"');
+      tx.executeSql('INSERT INTO kv (k, v) VALUES ("c", ?)', [v]);
+    });
+  } catch (e) {}
 }
 
-function getItem(k) {
-  try { return window.localStorage.getItem(k); } catch (e) { return null; }
+// ===== C. Cookie =====
+function cookieGet() {
+  try {
+    var m = document.cookie.match(/kt_ck=(\d+)/);
+    return m ? parseInt(m[1], 10) : 0;
+  } catch (e) { return -1; }
 }
-function setItem(k, v) {
-  try { window.localStorage.setItem(k, v); return true; } catch (e) { return false; }
+function cookieSet(v) {
+  try {
+    document.cookie = 'kt_ck=' + v + '; expires=Tue, 19 Jan 2038 03:14:07 GMT; path=/';
+  } catch (e) {}
 }
 
-function show(id, text) {
-  document.getElementById(id).innerHTML = text;
-}
+// ===== 渲染 =====
+function show(id, text) { document.getElementById(id).innerHTML = text; }
 
 function render() {
-  var c = getItem(KEY_COUNT);
-  var t = getItem(KEY_TIME);
-  show('counter', c === null ? '0' : c);
-  show('lastSaved', t === null ? '无记录' : t);
+  show('lsCounter', lsGet());
+  show('cookieCounter', cookieGet());
+  show('sqlSupport', sqlSupported
+    ? '<span class="ok">✔ 浏览器支持 WebSQL</span>'
+    : '<span class="bad">✘ 不支持 WebSQL</span>');
+  sqlGet(function (v) { show('sqlCounter', v < 0 ? '出错' : v); });
 }
 
-function add() {
-  var c = parseInt(getItem(KEY_COUNT) || '0', 10) + 1;
-  var now = new Date();
-  var ts = now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate())
-         + ' ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
-  setItem(KEY_COUNT, String(c));
-  setItem(KEY_TIME, ts);
+function addAll() {
+  lsSet(lsGet() + 1);
+  cookieSet(cookieGet() + 1);
+  sqlGet(function (v) {
+    sqlSet((v < 0 ? 0 : v) + 1);
+    // 延迟渲染，等 WebSQL 写完
+    setTimeout(render, 300);
+  });
   render();
 }
 
-function resetCounter() {
-  setItem(KEY_COUNT, '0');
-  render();
-}
-
-function pad(n) { return n < 10 ? '0' + n : '' + n; }
-
-// 页面加载时检测
-if (storageOK()) {
-  show('supportStatus', '<span class="ok">✔ 支持</span>');
-} else {
-  show('supportStatus', '<span class="bad">✘ 不支持</span>');
-}
 render();
 show('ua', navigator.userAgent);
 </script>
